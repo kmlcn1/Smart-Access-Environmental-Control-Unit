@@ -1,0 +1,6 @@
+../Core/Src/freertos.c:74:6:vApplicationGetIdleTaskMemory	1
+../Core/Src/freertos.c:88:6:MX_FREERTOS_Init	1
+../Core/Src/freertos.c:139:6:StartDefaultTask	1
+../Core/Src/freertos.c:157:6:TempFunc	2
+../Core/Src/freertos.c:184:6:MainFunc	1
+../Core/Src/freertos.c:202:6:NRFComFunc	1
