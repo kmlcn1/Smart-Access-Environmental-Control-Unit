@@ -22,10 +22,11 @@
 #include "task.h"
 #include "main.h"
 #include "cmsis_os.h"
-#include "Bme280.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <Bme280.h>
+#include "i2c.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -160,16 +161,18 @@ void TempFunc(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-	  if(pos==1)
-	 {
-//		 HAL_GPIO_WritePin(GPIOC,Pin_Select_1_Pin,GPIO_PIN_RESET);
-			Bme280_Raw_Temp(Room1Spi_Cs_Pin,Calib.temp1);
-			Bme280_Raw_Temp(Room2Spi_Cs_Pin,Calib.temp2);
-			Bme280_Raw_Temp(Room3Spi_Cs_Pin,Calib.temp3);
-			Bme280_Raw_Temp(Room4Spi_Cs_Pin,Calib.temp4);
-	 }
+//	  if(pos==1 && xTaskGetTickCount()- holdingtimeBme280>= pdMS_TO_TICKS(PeriodicTemperatureTimeforBme280))
+//	 {
+////		 HAL_GPIO_WritePin(GPIOC,Pin_Select_1_Pin,GPIO_PIN_RESET);
+//			Bme280_Raw_Temp(Room1Spi_Cs_Pin,Calib.temp1);
+//			Bme280_Raw_Temp(Room2Spi_Cs_Pin,Calib.temp2);
+//			Bme280_Raw_Temp(Room3Spi_Cs_Pin,Calib.temp3);
+//			Bme280_Raw_Temp(Room4Spi_Cs_Pin,Calib.temp4);
+//			holdingtimeBme280=xTaskGetTickCount();
+//	 }
 
-    osDelay(1);
+	  Sht31_Temperature();
+	  osDelay(1);
   }
   /* USER CODE END TempFunc */
 }

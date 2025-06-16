@@ -16,7 +16,6 @@ RM := rm -rf
 -include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
--include Core/Inc/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -65,8 +64,8 @@ all: main-build
 main-build: Control_Unit.elf secondary-outputs
 
 # Tool invocations
-Control_Unit.elf Control_Unit.map: $(OBJS) $(USER_OBJS) C:\Users\Kemal\STM32CubeIDE\workspace_1.16.1\Control_Unit\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Control_Unit.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Kemal\STM32CubeIDE\workspace_1.16.1\Control_Unit\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Control_Unit.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Control_Unit.elf Control_Unit.map: $(OBJS) $(USER_OBJS) C:\Users\Kemal\Documents\GitHub\Smart-Access-Environmental-Control-Unit\Control_Unit\STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Control_Unit.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Kemal\Documents\GitHub\Smart-Access-Environmental-Control-Unit\Control_Unit\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Control_Unit.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -24,11 +24,11 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "Bme280.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <Bme280.h>
+#include "i2c.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,10 +99,10 @@ int main(void)
   MX_SPI3_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  Bme280_Init(Room1Spi_Cs_Pin,chamber1);
-  Bme280_Init(Room2Spi_Cs_Pin,chamber2);
-  Bme280_Init(Room3Spi_Cs_Pin,chamber3);
-  Bme280_Init(Room4Spi_Cs_Pin,chamber4);
+ // Bme280_Init(Room1Spi_Cs_Pin,chamber1);
+ // Bme280_Init(Room2Spi_Cs_Pin,chamber2);
+ // Bme280_Init(Room3Spi_Cs_Pin,chamber3);
+//  Bme280_Init(Room4Spi_Cs_Pin,chamber4);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */
@@ -173,6 +173,27 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM1 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM1) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

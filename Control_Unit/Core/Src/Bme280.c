@@ -6,8 +6,7 @@
  */
 
 
-#include "../Src/Bme280.h"
-
+#include <Bme280.h>
 #include <stdint.h>
 #include "main.h"
 #include "spi.h"
@@ -25,6 +24,7 @@ Calibration chamber4;
 Bme280 Calib;
 uint8_t state=1;
 uint8_t pos=1;
+uint16_t holdingtimeBme280=0;
 uint8_t Calib_Bme280[]={0x88,0x89,0x8A,0x8B,
                         0x8C,0x8D,0x8E,0x8F,
                         0x90,0x91,0x92,0x93,

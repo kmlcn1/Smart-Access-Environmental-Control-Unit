@@ -79,6 +79,7 @@ extern Calibration chamber1;
 extern Calibration chamber2;
 extern Calibration chamber3;
 extern Calibration chamber4;
+extern uint16_t holdingtimeBme280;
 
 void Bme280_Init(uint16_t num, Calibration mCalibm);
 void Spi_Transmit(uint8_t *data);
