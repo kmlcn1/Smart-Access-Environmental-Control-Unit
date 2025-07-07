@@ -16,6 +16,8 @@
   *
   ******************************************************************************
   */
+#include <Mpu6050.h>
+#include <Sht31.h>
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "i2c.h"
@@ -118,5 +120,87 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
 }
 
 /* USER CODE BEGIN 1 */
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	if (hi2c==&hi2c1)
+	{
+		if(mI2Case==Sht31Transmit + 1)
+		{
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050AccellTransmitX + 1)
+		{
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050AccellTransmitY + 1)
+		{
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050AccellTransmitZ + 1)
+		{
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050GyroTransmitX + 1)
+		{
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050GyroTransmitY + 1)
+		{
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050GyroTransmitZ + 1)
+		{
+			mI2Case++;
+		}
+	}
+}
 
+void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	if (hi2c==&hi2c1)
+	{
+		if(mI2Case==Sht31Receive +1)
+		{
+			if(CRC_Calculator(mI2C.Receive)==mI2C.Receive[2]) //is CRC correct?
+			{
+				TemperatureConversion();
+				mI2Case++;
+				holdingtimeSht31= xTaskGetTickCount();
+			}
+			else
+			{
+				mI2Case=1; // Read Again
+			}
+
+		}
+		else if(mI2Case==Mpu6050AccellReceiveX + 1)
+		{
+			mMpu6050.AccellX= mMpu6050.RawAccellX[0] <8 | mMpu6050.RawAccellX[1];
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050AccellReceiveY + 1)
+		{
+			mMpu6050.AccellX= mMpu6050.RawAccellY[0] <8 | mMpu6050.RawAccellY[1];
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050AccellReceiveZ + 1)
+		{
+			mMpu6050.AccellX= mMpu6050.RawAccellZ[0] <8 | mMpu6050.RawAccellZ[1];
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050GyroReceiveX + 1)
+		{
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050GyroReceiveY + 1)
+		{
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050GyroReceiveZ + 1)
+		{
+			mI2Case++;
+		}
+
+	}
+}
 /* USER CODE END 1 */

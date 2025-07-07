@@ -1,0 +1,4 @@
+../Core/Src/Mpu6050.c:19:6:ConfigofAccelandGyro	24	static
+../Core/Src/Mpu6050.c:28:6:InitMpu6050	8	static
+../Core/Src/Mpu6050.c:36:6:ReadMpu6050AccellandGyro	16	static
+../Core/Src/Mpu6050.c:54:6:Mpu6050Read	8	static

@@ -1,6 +1,4 @@
 ../Core/Src/Sht31.c:22:6:Sht31_Temperature	2
 ../Core/Src/Sht31.c:33:6:Sht31_Enable_Measurement_with_Clock_Streching	5
-../Core/Src/Sht31.c:60:6:HAL_I2C_MasterTxCpltCallback	4
-../Core/Src/Sht31.c:75:6:HAL_I2C_MasterRxCpltCallback	4
-../Core/Src/Sht31.c:99:9:CRC_Calculator	4
-../Core/Src/Sht31.c:121:6:TemperatureConversion	1
+../Core/Src/Sht31.c:60:9:CRC_Calculator	4
+../Core/Src/Sht31.c:82:6:TemperatureConversion	1

@@ -1,0 +1,4 @@
+../Core/Src/Mpu6050.c:19:6:ConfigofAccelandGyro	1
+../Core/Src/Mpu6050.c:28:6:InitMpu6050	1
+../Core/Src/Mpu6050.c:36:6:ReadMpu6050AccellandGyro	3
+../Core/Src/Mpu6050.c:54:6:Mpu6050Read	14

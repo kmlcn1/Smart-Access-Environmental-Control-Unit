@@ -38,11 +38,22 @@ typedef struct _Sht31{
 }Sht31;
 
 typedef enum _I2Case{
-
 	Sht31Transmit=1,
 	Sht31Receive=3,
-	Mpu6050Transmit=5,
-	Mpu6050Receive=7,
+	Sht31CompletionProcess	=5,
+	Mpu6050AccellTransmitX	=6,
+	Mpu6050AccellReceiveX	=8,
+	Mpu6050AccellTransmitY	=10,
+	Mpu6050AccellReceiveY	=12,
+	Mpu6050AccellTransmitZ	=14,
+	Mpu6050AccellReceiveZ	=16,
+	Mpu6050GyroTransmitX	=18,
+	Mpu6050GyroReceiveX		=20,
+	Mpu6050GyroTransmitY	=22,
+	Mpu6050GyroReceiveY		=24,
+	Mpu6050GyroTransmitZ	=26,
+	Mpu6050GyroReceiveZ		=28,
+	Mpu6050CompletionProcess=29,
 }I2Case;
 
 
@@ -52,6 +63,7 @@ extern I2C mI2C;
 extern I2Case mI2Case;
 extern uint16_t holdingtime;
 extern uint8_t I2CAdress;
+extern uint32_t holdingtimeSht31;
 
 void Sht31_Temperature(void);
 void Sht31_Enable_Measurement_with_Clock_Streching(uint8_t situation,uint8_t Repeatability);

@@ -48,53 +48,14 @@ void Sht31_Enable_Measurement_with_Clock_Streching(uint8_t situation,uint8_t Rep
 			HAL_I2C_Master_Receive_IT(&hi2c1, Sht31Adress,mI2C.Receive , 3);
 			mI2Case++;
 			break;
-
-		case Mpu6050Transmit:
-			holdingtimeSht31= xTaskGetTickCount();
-			mI2Case=1;
+		case Sht31CompletionProcess:
+			mI2Case++;
 			break;
 	}
 
 }
 
-void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
-{
-	if (hi2c==&hi2c1)
-	{
-		if(mI2Case==Sht31Transmit + 1)
-		{
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050Transmit + 1)
-		{
-			mI2Case++;
-		}
-	}
-}
 
-void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
-{
-	if (hi2c==&hi2c1)
-	{
-		if(mI2Case==Sht31Receive +1)
-		{
-			if(CRC_Calculator(mI2C.Receive)==mI2C.Receive[2]) //is CRC correct?
-			{
-				TemperatureConversion();
-				mI2Case++;
-			}
-			else
-			{
-				mI2Case=1; // Read Again
-			}
-
-		}
-		else if(mI2Case==Mpu6050Receive + 1)
-		{
-
-		}
-	}
-}
 
 uint8_t CRC_Calculator(const uint8_t *data)
 {

@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include <Bme280.h>
 #include "i2c.h"
+#include <Mpu6050.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -190,6 +191,7 @@ void MainFunc(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	  Mpu6050Read();
     osDelay(1);
   }
   /* USER CODE END MainFunc */
