@@ -103,7 +103,7 @@ int main(void)
  // Bme280_Init(Room2Spi_Cs_Pin,chamber2);
  // Bme280_Init(Room3Spi_Cs_Pin,chamber3);
 //  Bme280_Init(Room4Spi_Cs_Pin,chamber4);
-  // InitMpu6050();
+   InitMpu6050();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

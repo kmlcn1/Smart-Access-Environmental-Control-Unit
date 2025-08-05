@@ -15,7 +15,7 @@
 I2C mI2C;
 SHT31Clock mSHT31Clock;
 Sht31 mSht31;
-I2Case mI2Case=1;
+I2Case mI2Case=0;
 uint32_t holdingtimeSht31=0;
 uint8_t I2CAdress=0;
 
@@ -27,6 +27,10 @@ void Sht31_Temperature(void)
 	// AD pin is connected to the ground.
 		Sht31_Enable_Measurement_with_Clock_Streching(Enable,EnableLow);
 
+	}
+	else
+	{
+//		mI2Case=8;
 	}
 }
 

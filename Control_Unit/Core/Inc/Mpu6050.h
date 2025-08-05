@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 
-#define Mpu650Address		0x68 //When AD0 pin is low // 01101000 (included W (0) bit)
+#define Mpu650Address		0x68<<1 //When AD0 pin is low // 01101000
 
 typedef struct _Mpu650Com
 {
@@ -41,20 +41,31 @@ typedef enum _Mpu650Value
 {
 	GyroAddress=0x1B,
 	AccellAddress=0x1C,
-	GyroData=0x08,
-	AccellData= 0x08,
-	AccellXoutMsb=0x3B,
-	AccellXoutLsb=0x3C,
-	AccellYoutMsb=0x3D,
-	AccellYoutLsb=0x3E,
-	AccellZoutMsb=0x3F,
-	AccellZoutLsb=0x40,
-	GyroXoutMsb=0x43,
-	GyroXoutLsb=0x44,
-	GyroYoutMsb=0x45,
-	GyroYoutLsb=0x46,
-	GyroZoutMsb=0x47,
-	GyroZoutLsb=0x48,
+	Mpu6050ConfigAdress=0x1A,
+	SignalPathResetAdress=0x68,
+	PowerManagement1Adress=0x6B,
+	PowerManagement2Adress=0x6C,
+	Mpu6050ConfigData=0x02, 		// (Output rate 1 khz, Accel: 94Hz 3ms delay, Gyro:98Hz, 2.8 Delay)
+	SampleRateDividerAdress=0x19,
+	SampleRateDividerData=0x00, 	// (sample rate 1khz )
+	SignalPathResetData=0x00,		// (All accel and gyro signal path reset )
+	GyroConfigData=0x00,			// (all axis self test disable, +/-250 degree/second)
+	AccellConfigData=0x00,			// (all axis self test disable, +/- 2g)
+	PowerManagement1Data=0x00,		// (Reset disable, Cycle Mod, Sleep Disable, Temp Dis, İnternal 8Mhz Oscillator )
+	PowerManagement1DataFull=0xFF,
+	PowerManagement2Data=0x00,		// (wake up freq 1.25Hz, gyro and accel all axis not set standby )
+	AccellXoutH=0x3B,
+	AccellXoutL=0x3C,
+	AccellYoutH=0x3D,
+	AccellYoutL=0x3E,
+	AccellZoutH=0x3F,
+	AccellZoutL=0x40,
+	GyroXoutH=0x43,
+	GyroXoutL=0x44,
+	GyroYoutH=0x45,
+	GyroYoutL=0x46,
+	GyroZoutH=0x47,
+	GyroZoutL=0x48,
 }Mpu650Value;
 
 
@@ -65,7 +76,8 @@ extern Mpu650Com mMpu650Com;
 extern Mpu650 mMpu6050;
 
 
-void ReadMpu6050AccellandGyro(Mpu650Value adress,char *type);
+void ReadMpu6050AccellandGyro(Mpu650Value AdressH);
 void ReadMpu6050Gyro(Mpu650Value adress,char *type);
 void Mpu6050Read(void);
+void TransferReceiverDataforMpu6050(char *in , uint8_t *out);
 #endif /* INC_MPU6050_H_ */

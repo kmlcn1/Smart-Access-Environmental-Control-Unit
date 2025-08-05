@@ -95,7 +95,7 @@ void Error_Handler(void);
 #define SWO_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-#define PeriodicTemperatureTimeforSth31				5000	// type of milisecond
+#define PeriodicTemperatureTimeforSth31				500	// type of milisecond
 #define PeriodicTemperatureTimeforBme280			500	// type of milisecond
 /* USER CODE END Private defines */
 

@@ -128,30 +128,7 @@ void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 		{
 			mI2Case++;
 		}
-		else if(mI2Case==Mpu6050AccellTransmitX + 1)
-		{
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050AccellTransmitY + 1)
-		{
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050AccellTransmitZ + 1)
-		{
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050GyroTransmitX + 1)
-		{
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050GyroTransmitY + 1)
-		{
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050GyroTransmitZ + 1)
-		{
-			mI2Case++;
-		}
+
 	}
 }
 
@@ -173,34 +150,59 @@ void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
 			}
 
 		}
-		else if(mI2Case==Mpu6050AccellReceiveX + 1)
-		{
-			mMpu6050.AccellX= mMpu6050.RawAccellX[0] <8 | mMpu6050.RawAccellX[1];
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050AccellReceiveY + 1)
-		{
-			mMpu6050.AccellX= mMpu6050.RawAccellY[0] <8 | mMpu6050.RawAccellY[1];
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050AccellReceiveZ + 1)
-		{
-			mMpu6050.AccellX= mMpu6050.RawAccellZ[0] <8 | mMpu6050.RawAccellZ[1];
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050GyroReceiveX + 1)
-		{
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050GyroReceiveY + 1)
-		{
-			mI2Case++;
-		}
-		else if(mI2Case==Mpu6050GyroReceiveZ + 1)
-		{
-			mI2Case++;
-		}
+
 
 	}
+}
+
+void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	if (hi2c==&hi2c1)
+	{
+		if(mI2Case==Mpu6050AccellReadX + 1)
+		{
+			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawGyroY);
+
+			mMpu6050.GyroY= ((mMpu6050.RawGyroY[0] <<8) | mMpu6050.RawGyroY[1])/131;
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050AccellReadY + 1)
+		{
+			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawGyroX);
+
+			mMpu6050.GyroX= ((mMpu6050.RawGyroX[0] <<8) | mMpu6050.RawGyroX[1])/131;
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050AccellReadZ + 1)
+		{
+			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawGyroZ);
+
+			mMpu6050.GyroZ= ((mMpu6050.RawGyroZ[0] <<8) | mMpu6050.RawGyroZ[1])/131;
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050GyroReadX + 1)
+		{
+			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawAccellX);
+
+			mMpu6050.AccellX= ((mMpu6050.RawAccellX[0] <<8) | mMpu6050.RawAccellX[1])/16384;
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050GyroReadY + 1)
+		{
+			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawAccellZ);
+
+			mMpu6050.AccellZ= ((mMpu6050.RawAccellZ[0] <<8) | mMpu6050.RawAccellZ[1])/16384;
+			mI2Case++;
+		}
+		else if(mI2Case==Mpu6050GyroReadZ + 1)
+		{
+			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawAccellY);
+
+			mMpu6050.AccellY= ((mMpu6050.RawAccellY[0] <<8) | mMpu6050.RawAccellY[1])/16384;
+			mI2Case++;
+
+		}
+	}
+
 }
 /* USER CODE END 1 */

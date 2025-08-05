@@ -40,20 +40,14 @@ typedef struct _Sht31{
 typedef enum _I2Case{
 	Sht31Transmit=1,
 	Sht31Receive=3,
-	Sht31CompletionProcess	=5,
-	Mpu6050AccellTransmitX	=6,
-	Mpu6050AccellReceiveX	=8,
-	Mpu6050AccellTransmitY	=10,
-	Mpu6050AccellReceiveY	=12,
-	Mpu6050AccellTransmitZ	=14,
-	Mpu6050AccellReceiveZ	=16,
-	Mpu6050GyroTransmitX	=18,
-	Mpu6050GyroReceiveX		=20,
-	Mpu6050GyroTransmitY	=22,
-	Mpu6050GyroReceiveY		=24,
-	Mpu6050GyroTransmitZ	=26,
-	Mpu6050GyroReceiveZ		=28,
-	Mpu6050CompletionProcess=29,
+	Sht31CompletionProcess=5,
+	Mpu6050AccellReadX	=6,
+	Mpu6050AccellReadY	=8,
+	Mpu6050AccellReadZ	=10,
+	Mpu6050GyroReadX	=12,
+	Mpu6050GyroReadY	=14,
+	Mpu6050GyroReadZ	=16,
+	Mpu6050CompletionProcess=18,
 }I2Case;
 
 
