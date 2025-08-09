@@ -50,7 +50,7 @@ typedef enum _Mpu650Value
 	SampleRateDividerData=0x00, 	// (sample rate 1khz )
 	SignalPathResetData=0x00,		// (All accel and gyro signal path reset )
 	GyroConfigData=0x00,			// (all axis self test disable, +/-250 degree/second)
-	AccellConfigData=0x00,			// (all axis self test disable, +/- 2g)
+	AccellConfigData=0x10,			// (all axis self test disable, +/- 8g)
 	PowerManagement1Data=0x00,		// (Reset disable, Cycle Mod, Sleep Disable, Temp Dis, İnternal 8Mhz Oscillator )
 	PowerManagement1DataFull=0xFF,
 	PowerManagement2Data=0x00,		// (wake up freq 1.25Hz, gyro and accel all axis not set standby )

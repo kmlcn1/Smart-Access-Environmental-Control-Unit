@@ -98,12 +98,14 @@ int main(void)
   MX_SPI2_Init();
   MX_SPI3_Init();
   MX_TIM2_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
  // Bme280_Init(Room1Spi_Cs_Pin,chamber1);
  // Bme280_Init(Room2Spi_Cs_Pin,chamber2);
  // Bme280_Init(Room3Spi_Cs_Pin,chamber3);
 //  Bme280_Init(Room4Spi_Cs_Pin,chamber4);
    InitMpu6050();
+   Tmc2208Init();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

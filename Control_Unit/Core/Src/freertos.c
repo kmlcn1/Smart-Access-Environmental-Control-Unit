@@ -191,7 +191,7 @@ void MainFunc(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-	  Mpu6050Read();
+	Mpu6050Read();
     osDelay(1);
   }
   /* USER CODE END MainFunc */

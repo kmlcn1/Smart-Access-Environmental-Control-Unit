@@ -35,7 +35,7 @@ void InitMpu6050(void)
 	ConfigofAccelandGyro(PowerManagement2Adress,PowerManagement2Data);
 	ConfigofAccelandGyro(SampleRateDividerAdress,SampleRateDividerData);
 
-	mI2Case=6;
+	mI2Case=1;
 }
 
 
@@ -44,7 +44,6 @@ void ReadMpu6050AccellandGyro(Mpu650Value AdressH)
 {
 	 mI2Case++;
 	 HAL_I2C_Mem_Read_IT(&hi2c1,(uint16_t) Mpu650Address, (uint16_t) AdressH, (uint16_t) I2C_MEMADD_SIZE_8BIT, (uint8_t*)mMpu650Com.Receive, 2);
-
 }
 
 
