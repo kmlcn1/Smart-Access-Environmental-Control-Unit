@@ -168,9 +168,11 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 		}
 		else if(mI2Case==Mpu6050AccellReadY + 1)
 		{
+			uint16_t OldGyroX;
 			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawGyroX);
-
+			OldGyroX=mMpu6050.GyroX;
 			mMpu6050.GyroX= ((mMpu6050.RawGyroX[0] <<8) | mMpu6050.RawGyroX[1])/131;
+			mMpu6050.GyroXAngleDif=mMpu6050.GyroX-OldGyroX;
 			mI2Case++;
 		}
 		else if(mI2Case==Mpu6050AccellReadZ + 1)

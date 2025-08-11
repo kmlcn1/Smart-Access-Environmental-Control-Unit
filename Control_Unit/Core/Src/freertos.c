@@ -28,6 +28,8 @@
 #include <Bme280.h>
 #include "i2c.h"
 #include <Mpu6050.h>
+#include <Tmc2208.h>
+#include "tim.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -192,6 +194,9 @@ void MainFunc(void const * argument)
   for(;;)
   {
 	Mpu6050Read();
+	SetRotatingSpeed(&htim3,mStepMotor.SetSpeed);
+	SetRotatingMovement(mMpu6050.GyroXAngleDif);
+
     osDelay(1);
   }
   /* USER CODE END MainFunc */

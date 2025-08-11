@@ -1,6 +1,6 @@
-../Core/Src/freertos.c:76:6:vApplicationGetIdleTaskMemory	24	static
-../Core/Src/freertos.c:90:6:MX_FREERTOS_Init	128	static
-../Core/Src/freertos.c:141:6:StartDefaultTask	16	static
-../Core/Src/freertos.c:159:6:TempFunc	16	static
-../Core/Src/freertos.c:188:6:MainFunc	16	static
-../Core/Src/freertos.c:207:6:NRFComFunc	16	static
+../Core/Src/freertos.c:78:6:vApplicationGetIdleTaskMemory	24	static
+../Core/Src/freertos.c:92:6:MX_FREERTOS_Init	128	static
+../Core/Src/freertos.c:143:6:StartDefaultTask	16	static
+../Core/Src/freertos.c:161:6:TempFunc	16	static
+../Core/Src/freertos.c:190:6:MainFunc	16	static
+../Core/Src/freertos.c:212:6:NRFComFunc	16	static

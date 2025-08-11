@@ -31,7 +31,9 @@ typedef struct _Mpu650
 	uint16_t AccellY;
 	uint16_t AccellZ;
 	uint16_t GyroX;
+	float GyroXAngleDif;
 	uint16_t GyroY;
+	float GyroYAngleDif;
 	uint16_t GyroZ;
 
 }Mpu650;
@@ -75,7 +77,7 @@ extern Mpu650Value mMpu650Value;
 extern Mpu650Com mMpu650Com;
 extern Mpu650 mMpu6050;
 
-
+void InitMpu6050(void);
 void ReadMpu6050AccellandGyro(Mpu650Value AdressH);
 void ReadMpu6050Gyro(Mpu650Value adress,char *type);
 void Mpu6050Read(void);
