@@ -19,11 +19,7 @@
 
 Step mStep;
 StepMotor mStepMotor={.isReady=true,.SetSpeed=50,.step=0};
-uint8_t TypeOfParameter;
-bool isReady=true;
-uint32_t counter;
-uint16_t step;
-uint16_t TIM_ARR=0;
+
 
 void Tmc2208Init()
 {
@@ -69,12 +65,10 @@ void SetMotorDirection(MotorDirection direction)
 {
     if (direction == MotorDirectionCW)
     {
-        HAL_GPIO_WritePin(GPIOB, StepMotorDir_Pin, GPIO_PIN_SET);
-   //     vTaskDelay(pdMS_TO_TICKS(500));
+        HAL_GPIO_WritePin(GPIOC, StepMotorDir_Pin, GPIO_PIN_SET);
     } else if (direction == MotorDirectionCCCW)
     {
-        HAL_GPIO_WritePin(GPIOB, StepMotorDir_Pin, GPIO_PIN_RESET);
-   //     vTaskDelay(pdMS_TO_TICKS(500));
+        HAL_GPIO_WritePin(GPIOC, StepMotorDir_Pin, GPIO_PIN_RESET);
     }
 }
 
@@ -88,6 +82,7 @@ void SetRotatingMovement(float angle)
 		if(angle<0)
 		{
 			SetMotorDirection(MotorDirectionCW);
+
 		}
 		else
 		{
@@ -98,7 +93,7 @@ void SetRotatingMovement(float angle)
 
 		mStepMotor.step= angle/1.8*mStepMotor.TypeOfParameter; // Calculate Number of Step
 
-		__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 1); // Set Duty Cycle
+		__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 25); // Set Duty Cycle
 		HAL_TIM_PWM_Start_IT(&htim3, TIM_CHANNEL_1);
 
 	}
@@ -112,7 +107,13 @@ void SetRotatingSpeed(TIM_HandleTypeDef *htim, uint8_t percentage)
 	if(percentage>100) percentage=100;
 	if (percentage<=0) percentage=1;
 
-	htim->Instance->ARR=222 - ((percentage - 1) * 122) / 99;
+	htim->Instance->ARR=(222 - ((percentage - 1) * 122) / 99)-1;
+}
+
+void ActiveStabilizationPlatform(void)
+{
+	SetRotatingSpeed(&htim3,mStepMotor.SetSpeed);
+	SetRotatingMovement(mMpu6050.GyroXAngleDif);
 }
 
 void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)

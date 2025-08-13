@@ -1,6 +1,7 @@
-../Core/Src/Tmc2208.c:28:6:Tmc2208Init	1
-../Core/Src/Tmc2208.c:34:6:SetStepMode	5
-../Core/Src/Tmc2208.c:68:6:SetMotorDirection	3
-../Core/Src/Tmc2208.c:81:6:SetRotatingMovement	4
-../Core/Src/Tmc2208.c:107:6:SetRotatingSpeed	3
-../Core/Src/Tmc2208.c:118:6:HAL_TIM_PWM_PulseFinishedCallback	3
+../Core/Src/Tmc2208.c:24:6:Tmc2208Init	1
+../Core/Src/Tmc2208.c:30:6:SetStepMode	5
+../Core/Src/Tmc2208.c:64:6:SetMotorDirection	3
+../Core/Src/Tmc2208.c:75:6:SetRotatingMovement	4
+../Core/Src/Tmc2208.c:102:6:SetRotatingSpeed	3
+../Core/Src/Tmc2208.c:113:6:ActiveStabilizationPlatform	1
+../Core/Src/Tmc2208.c:119:6:HAL_TIM_PWM_PulseFinishedCallback	3

@@ -34,13 +34,12 @@ typedef struct _StepMotor{
 }StepMotor;
 
 
-
 extern StepMotor mStepMotor;
 extern  bool isReady;
 
-
+void ActiveStabilizationPlatform(void);
 void SetRotatingSpeed(TIM_HandleTypeDef *htim, uint8_t percentage);
-void Tmc2208Init();
+void Tmc2208Init(void);
 void SetStepMode(uint8_t parameter);
 void SetMotorDirection(MotorDirection direction);
 void SetRotatingMovement(float angle);

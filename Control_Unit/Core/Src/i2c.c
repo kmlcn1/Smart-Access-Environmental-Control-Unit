@@ -173,6 +173,13 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 			OldGyroX=mMpu6050.GyroX;
 			mMpu6050.GyroX= ((mMpu6050.RawGyroX[0] <<8) | mMpu6050.RawGyroX[1])/131;
 			mMpu6050.GyroXAngleDif=mMpu6050.GyroX-OldGyroX;
+			// for getting increasing number over zero when the platform is rotating CW
+			if(mMpu6050.GyroXAngleDif>180)
+			mMpu6050.GyroXAngleDif=mMpu6050.GyroXAngleDif-500;
+
+//			else if(mMpu6050.GyroXAngleDif>180)
+//			mMpu6050.GyroXAngleDif=(mMpu6050.GyroXAngleDif+500)*(-1);
+
 			mI2Case++;
 		}
 		else if(mI2Case==Mpu6050AccellReadZ + 1)

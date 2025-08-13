@@ -194,9 +194,7 @@ void MainFunc(void const * argument)
   for(;;)
   {
 	Mpu6050Read();
-	SetRotatingSpeed(&htim3,mStepMotor.SetSpeed);
-	SetRotatingMovement(mMpu6050.GyroXAngleDif);
-
+	ActiveStabilizationPlatform();
     osDelay(1);
   }
   /* USER CODE END MainFunc */

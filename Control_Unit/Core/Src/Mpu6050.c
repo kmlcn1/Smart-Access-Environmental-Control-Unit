@@ -11,10 +11,14 @@
 #include <Mpu6050.h>
 #include <string.h>
 #include <stdlib.h>
+#include "main.h"
+#include "FreeRTOS.h"
+#include "task.h"
+
 Mpu650Com mMpu650Com;
 Mpu650Value mMpu650Value;
 Mpu650 mMpu6050;
-
+uint32_t holdingtimeMpu6050=0;
 
 void ConfigofAccelandGyro(Mpu650Value adress,Mpu650Value data )
 {
@@ -49,37 +53,40 @@ void ReadMpu6050AccellandGyro(Mpu650Value AdressH)
 
 void Mpu6050Read(void)
 {
-
-	switch (mI2Case)
+	if(xTaskGetTickCount()- holdingtimeMpu6050>= pdMS_TO_TICKS(PeriodicGetAngleTime))
 	{
+		switch (mI2Case)
+		{
 
-		case Mpu6050AccellReadX:
-			ReadMpu6050AccellandGyro(AccellXoutH);
-			break;
+			case Mpu6050AccellReadX:
+				ReadMpu6050AccellandGyro(AccellXoutH);
+				break;
 
-		case Mpu6050AccellReadY:
-			ReadMpu6050AccellandGyro(AccellYoutH);
-			break;
+			case Mpu6050AccellReadY:
+				ReadMpu6050AccellandGyro(AccellYoutH);
+				break;
 
-		case Mpu6050AccellReadZ:
-			ReadMpu6050AccellandGyro(AccellZoutH);
-			break;
+			case Mpu6050AccellReadZ:
+				ReadMpu6050AccellandGyro(AccellZoutH);
+				break;
 
-		case Mpu6050GyroReadX:
-			ReadMpu6050AccellandGyro(GyroXoutH);
-			break;
+			case Mpu6050GyroReadX:
+				ReadMpu6050AccellandGyro(GyroXoutH);
+				break;
 
-		case Mpu6050GyroReadY:
-			ReadMpu6050AccellandGyro(GyroYoutH);
-			break;
+			case Mpu6050GyroReadY:
+				ReadMpu6050AccellandGyro(GyroYoutH);
+				break;
 
-		case Mpu6050GyroReadZ:
-			ReadMpu6050AccellandGyro(GyroZoutH);
-			break;
+			case Mpu6050GyroReadZ:
+				ReadMpu6050AccellandGyro(GyroZoutH);
+				break;
 
-		case Mpu6050CompletionProcess:
-			mI2Case=6;
-			break;
+			case Mpu6050CompletionProcess:
+				mI2Case=6;
+				holdingtimeMpu6050=xTaskGetTickCount();
+				break;
+		}
 	}
 
 }

@@ -197,12 +197,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-  if(htim==&htim3)
-  	{
-	  HAL_TIM_Base_Stop(&htim3);
-	  __HAL_TIM_SET_COUNTER(&htim3,0);
-  		isReady=true;
-  	}
+
   /* USER CODE END Callback 1 */
 }
 

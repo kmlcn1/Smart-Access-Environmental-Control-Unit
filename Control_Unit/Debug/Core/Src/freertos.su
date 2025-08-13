@@ -3,4 +3,4 @@
 ../Core/Src/freertos.c:143:6:StartDefaultTask	16	static
 ../Core/Src/freertos.c:161:6:TempFunc	16	static
 ../Core/Src/freertos.c:190:6:MainFunc	16	static
-../Core/Src/freertos.c:212:6:NRFComFunc	16	static
+../Core/Src/freertos.c:210:6:NRFComFunc	16	static

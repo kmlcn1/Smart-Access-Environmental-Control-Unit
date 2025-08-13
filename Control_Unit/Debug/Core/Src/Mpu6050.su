@@ -1,5 +1,5 @@
-../Core/Src/Mpu6050.c:19:6:ConfigofAccelandGyro	24	static
-../Core/Src/Mpu6050.c:28:6:InitMpu6050	8	static
-../Core/Src/Mpu6050.c:43:6:ReadMpu6050AccellandGyro	24	static
-../Core/Src/Mpu6050.c:50:6:Mpu6050Read	8	static
-../Core/Src/Mpu6050.c:87:6:TransferReceiverDataforMpu6050	16	static
+../Core/Src/Mpu6050.c:23:6:ConfigofAccelandGyro	24	static
+../Core/Src/Mpu6050.c:32:6:InitMpu6050	8	static
+../Core/Src/Mpu6050.c:47:6:ReadMpu6050AccellandGyro	24	static
+../Core/Src/Mpu6050.c:54:6:Mpu6050Read	8	static
+../Core/Src/Mpu6050.c:94:6:TransferReceiverDataforMpu6050	16	static
