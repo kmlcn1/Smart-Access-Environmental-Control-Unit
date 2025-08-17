@@ -1,4 +1,4 @@
 ../Core/Src/Sht31.c:22:6:Sht31_Temperature	2
-../Core/Src/Sht31.c:37:6:Sht31_Enable_Measurement_with_Clock_Streching	5
-../Core/Src/Sht31.c:64:9:CRC_Calculator	4
-../Core/Src/Sht31.c:86:6:TemperatureConversion	1
+../Core/Src/Sht31.c:36:6:Sht31_Enable_Measurement_with_Clock_Streching	5
+../Core/Src/Sht31.c:63:9:CRC_Calculator	4
+../Core/Src/Sht31.c:85:6:TemperatureConversion	1

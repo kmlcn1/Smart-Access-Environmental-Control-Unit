@@ -18,6 +18,8 @@
   */
 #include <Mpu6050.h>
 #include <Sht31.h>
+#include "main.h"
+#include <Bmp180.h>
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "i2c.h"
@@ -211,7 +213,23 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 			mI2Case++;
 
 		}
+		else if(mI2Case==Bmp180Read +1)
+		{
+			mBme180.RawPressure=(mBme180.PressXLSB << 16 | mBme180.PressMSB <<8 | mBme180.PressXLSB );
+		}
+	}
+}
+
+	void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
+	{
+		if (hi2c==&hi2c1)
+		{
+			if(mI2Case==Bmp180MeasurementControlData + 1)
+			{
+				mI2Case++;
+			}
+		}
 	}
 
-}
+
 /* USER CODE END 1 */

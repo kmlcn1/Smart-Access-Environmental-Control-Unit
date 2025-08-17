@@ -83,8 +83,8 @@ void Mpu6050Read(void)
 				break;
 
 			case Mpu6050CompletionProcess:
-				mI2Case=6;
 				holdingtimeMpu6050=xTaskGetTickCount();
+				mI2Case++;
 				break;
 		}
 	}

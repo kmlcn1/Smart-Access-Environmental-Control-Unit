@@ -1,4 +1,5 @@
 "./Core/Src/Bme280.o"
+"./Core/Src/Bmp180.o"
 "./Core/Src/Mpu6050.o"
 "./Core/Src/Sht31.o"
 "./Core/Src/Tmc2208.o"

@@ -24,9 +24,8 @@ void Sht31_Temperature(void)
 
 	if(xTaskGetTickCount()- holdingtimeSht31>= pdMS_TO_TICKS(PeriodicTemperatureTimeforSth31))
 	{
-	// AD pin is connected to the ground.
+		// AD pin is connected to the ground.
 		Sht31_Enable_Measurement_with_Clock_Streching(Enable,EnableLow);
-
 	}
 	else
 	{

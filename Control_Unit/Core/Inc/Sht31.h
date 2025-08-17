@@ -48,6 +48,9 @@ typedef enum _I2Case{
 	Mpu6050GyroReadY	=14,
 	Mpu6050GyroReadZ	=16,
 	Mpu6050CompletionProcess=18,
+	Bmp180MeasurementControlData=19,
+	Bmp180Read=21,
+	Bmp180CompletionProcess=23,
 }I2Case;
 
 

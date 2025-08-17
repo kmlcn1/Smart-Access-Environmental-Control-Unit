@@ -98,6 +98,7 @@ void Error_Handler(void);
 #define PeriodicTemperatureTimeforSth31				500		// type of milisecond
 #define PeriodicTemperatureTimeforBme280			500		// type of milisecond
 #define PeriodicGetAngleTime						200	// type of milisecond
+#define PeriodicPressureTime						500	// type of milisecond
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
