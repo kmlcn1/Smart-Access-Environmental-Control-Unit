@@ -81,5 +81,5 @@ void InitMpu6050(void);
 void ReadMpu6050AccellandGyro(Mpu650Value AdressH);
 void ReadMpu6050Gyro(Mpu650Value adress,char *type);
 void Mpu6050Read(void);
-void TransferReceiverDataforMpu6050(char *in , uint8_t *out);
+void TransferToReceiverData(char *in , uint8_t *out, uint8_t loop);
 #endif /* INC_MPU6050_H_ */

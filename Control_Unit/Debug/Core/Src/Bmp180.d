@@ -39,7 +39,8 @@ Core/Src/Bmp180.o: ../Core/Src/Bmp180.c ../Core/Inc/Bmp180.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- ../Core/Inc/Sht31.h ../Core/Inc/i2c.h ../Core/Inc/main.h
+ ../Core/Inc/Sht31.h ../Core/Inc/i2c.h ../Core/Inc/main.h \
+ ../Core/Inc/Mpu6050.h
 ../Core/Inc/Bmp180.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
@@ -85,3 +86,4 @@ Core/Src/Bmp180.o: ../Core/Src/Bmp180.c ../Core/Inc/Bmp180.h \
 ../Core/Inc/Sht31.h:
 ../Core/Inc/i2c.h:
 ../Core/Inc/main.h:
+../Core/Inc/Mpu6050.h:

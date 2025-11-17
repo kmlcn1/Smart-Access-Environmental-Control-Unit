@@ -91,10 +91,13 @@ void Mpu6050Read(void)
 
 }
 
-void TransferReceiverDataforMpu6050(char *in , uint8_t *out)
+void TransferToReceiverData(char *in , uint8_t *out, uint8_t loop)
 {
-	*(out) = (uint8_t)*(in);
-	 *(out + 1) = (uint8_t)*(in + 1);
+	//*(out) = (uint8_t)*(in);
+	for (uint8_t i =0;i<loop;i++)
+	{
+		*(out + i) = (uint8_t)*(in + i);
+	}
 }
 
 

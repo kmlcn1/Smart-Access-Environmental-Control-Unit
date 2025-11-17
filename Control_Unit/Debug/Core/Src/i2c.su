@@ -4,4 +4,4 @@
 ../Core/Src/i2c.c:125:6:HAL_I2C_MasterTxCpltCallback	16	static
 ../Core/Src/i2c.c:137:6:HAL_I2C_MasterRxCpltCallback	16	static
 ../Core/Src/i2c.c:160:6:HAL_I2C_MemRxCpltCallback	24	static
-../Core/Src/i2c.c:223:7:HAL_I2C_MemTxCpltCallback	16	static
+../Core/Src/i2c.c:237:7:HAL_I2C_MemTxCpltCallback	16	static

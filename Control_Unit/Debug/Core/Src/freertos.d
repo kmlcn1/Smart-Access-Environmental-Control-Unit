@@ -49,7 +49,7 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  ../Core/Inc/Bme280.h ../Core/Inc/i2c.h ../Core/Inc/main.h \
  ../Core/Inc/Mpu6050.h ../Core/Inc/Tmc2208.h ../Core/Inc/tim.h \
- ../Core/Inc/tim.h
+ ../Core/Inc/tim.h ../Core/Inc/Bmp180.h ../Core/Inc/Sht31.h
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -106,3 +106,5 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
 ../Core/Inc/Tmc2208.h:
 ../Core/Inc/tim.h:
 ../Core/Inc/tim.h:
+../Core/Inc/Bmp180.h:
+../Core/Inc/Sht31.h:

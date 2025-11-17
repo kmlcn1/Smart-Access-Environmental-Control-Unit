@@ -109,6 +109,7 @@ int main(void)
 //  Bme280_Init(Room4Spi_Cs_Pin,chamber4);
    InitMpu6050();
    Tmc2208Init();
+   Bmp180Init();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

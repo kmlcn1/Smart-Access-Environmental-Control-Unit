@@ -49,7 +49,7 @@ void MX_I2C1_Init(void)
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
   hi2c1.Init.OwnAddress2 = 0;
   hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_ENABLE;
   if (HAL_I2C_Init(&hi2c1) != HAL_OK)
   {
     Error_Handler();
@@ -163,7 +163,7 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 	{
 		if(mI2Case==Mpu6050AccellReadX + 1)
 		{
-			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawGyroY);
+			TransferToReceiverData(mMpu650Com.Receive,mMpu6050.RawGyroY,2);
 
 			mMpu6050.GyroY= ((mMpu6050.RawGyroY[0] <<8) | mMpu6050.RawGyroY[1])/131;
 			mI2Case++;
@@ -171,7 +171,7 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 		else if(mI2Case==Mpu6050AccellReadY + 1)
 		{
 			uint16_t OldGyroX;
-			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawGyroX);
+			TransferToReceiverData(mMpu650Com.Receive,mMpu6050.RawGyroX,2);
 			OldGyroX=mMpu6050.GyroX;
 			mMpu6050.GyroX= ((mMpu6050.RawGyroX[0] <<8) | mMpu6050.RawGyroX[1])/131;
 			mMpu6050.GyroXAngleDif=mMpu6050.GyroX-OldGyroX;
@@ -186,36 +186,50 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 		}
 		else if(mI2Case==Mpu6050AccellReadZ + 1)
 		{
-			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawGyroZ);
+			TransferToReceiverData(mMpu650Com.Receive,mMpu6050.RawGyroZ,2);
 
 			mMpu6050.GyroZ= ((mMpu6050.RawGyroZ[0] <<8) | mMpu6050.RawGyroZ[1])/131;
 			mI2Case++;
 		}
 		else if(mI2Case==Mpu6050GyroReadX + 1)
 		{
-			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawAccellX);
+			TransferToReceiverData(mMpu650Com.Receive,mMpu6050.RawAccellX,2);
 
 			mMpu6050.AccellX= ((mMpu6050.RawAccellX[0] <<8) | mMpu6050.RawAccellX[1])/16384;
 			mI2Case++;
 		}
 		else if(mI2Case==Mpu6050GyroReadY + 1)
 		{
-			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawAccellZ);
+			TransferToReceiverData(mMpu650Com.Receive,mMpu6050.RawAccellZ,2);
 
 			mMpu6050.AccellZ= ((mMpu6050.RawAccellZ[0] <<8) | mMpu6050.RawAccellZ[1])/16384;
 			mI2Case++;
 		}
 		else if(mI2Case==Mpu6050GyroReadZ + 1)
 		{
-			TransferReceiverDataforMpu6050(mMpu650Com.Receive,mMpu6050.RawAccellY);
+			TransferToReceiverData(mMpu650Com.Receive,mMpu6050.RawAccellY,2);
 
 			mMpu6050.AccellY= ((mMpu6050.RawAccellY[0] <<8) | mMpu6050.RawAccellY[1])/16384;
 			mI2Case++;
 
 		}
-		else if(mI2Case==Bmp180Read +1)
+		else if(mI2Case==Bmp180TemperatureRead +1)
 		{
-			mBme180.RawPressure=(mBme180.PressXLSB << 16 | mBme180.PressMSB <<8 | mBme180.PressXLSB );
+			mBmp180.TempMSB=mBmp180Com.Read[0];
+			mBmp180.TempLSB=mBmp180Com.Read[1];
+
+			mBmp180.RawTemperature= mBmp180.TempMSB <<8 | mBmp180.TempLSB;
+			mI2Case++;
+		}
+
+		else if(mI2Case==Bmp180PressureRead +1)
+		{
+			mBmp180.PressMSB=mBmp180Com.Read[0];
+			mBmp180.PressLSB=mBmp180Com.Read[1];
+			mBmp180.PressXLSB=mBmp180Com.Read[2];
+
+			mBmp180.RawPressure= (mBmp180.PressMSB << 16 | mBmp180.PressLSB <<8 | mBmp180.PressXLSB )>>( 8 - Oss);
+			mI2Case++;
 		}
 	}
 }
@@ -224,7 +238,7 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 	{
 		if (hi2c==&hi2c1)
 		{
-			if(mI2Case==Bmp180MeasurementControlData + 1)
+			if(mI2Case==Bmp180TemperatureWrite + 1 || mI2Case== Bmp180PressureWrite + 1)
 			{
 				mI2Case++;
 			}

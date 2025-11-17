@@ -2,4 +2,4 @@
 ../Core/Src/Mpu6050.c:32:6:InitMpu6050	1
 ../Core/Src/Mpu6050.c:47:6:ReadMpu6050AccellandGyro	1
 ../Core/Src/Mpu6050.c:54:6:Mpu6050Read	9
-../Core/Src/Mpu6050.c:94:6:TransferReceiverDataforMpu6050	1
+../Core/Src/Mpu6050.c:94:6:TransferToReceiverData	2

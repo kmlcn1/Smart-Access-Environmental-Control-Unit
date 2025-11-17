@@ -30,6 +30,8 @@
 #include <Mpu6050.h>
 #include <Tmc2208.h>
 #include "tim.h"
+#include <Bmp180.h>
+#include <Sht31.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -175,6 +177,7 @@ void TempFunc(void const * argument)
 //	 }
 
 	  Sht31_Temperature();
+	  ReadBmp180PressureData();
 	  osDelay(1);
   }
   /* USER CODE END TempFunc */
