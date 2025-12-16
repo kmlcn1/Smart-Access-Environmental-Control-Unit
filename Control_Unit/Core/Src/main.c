@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "dma.h"
 #include "i2c.h"
 #include "spi.h"
 #include "tim.h"
@@ -32,6 +33,8 @@
 #include <Tmc2208.h>
 #include <stdbool.h>
 #include <Mpu6050.h>
+#include "Nrf2401Plus.h"
+#include <Bmp180.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -96,6 +99,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART2_UART_Init();
   MX_I2C1_Init();
   MX_SPI2_Init();
@@ -103,13 +107,14 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
- // Bme280_Init(Room1Spi_Cs_Pin,chamber1);
+  Bme280_Init(Room1Spi_Cs_Pin,&chamber1);
  // Bme280_Init(Room2Spi_Cs_Pin,chamber2);
  // Bme280_Init(Room3Spi_Cs_Pin,chamber3);
 //  Bme280_Init(Room4Spi_Cs_Pin,chamber4);
    InitMpu6050();
    Tmc2208Init();
    Bmp180Init();
+   NrfInit(TX);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

@@ -32,6 +32,7 @@
 #include "tim.h"
 #include <Bmp180.h>
 #include <Sht31.h>
+#include "Nrf2401Plus.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -166,15 +167,16 @@ void TempFunc(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-//	  if(pos==1 && xTaskGetTickCount()- holdingtimeBme280>= pdMS_TO_TICKS(PeriodicTemperatureTimeforBme280))
-//	 {
-////		 HAL_GPIO_WritePin(GPIOC,Pin_Select_1_Pin,GPIO_PIN_RESET);
-//			Bme280_Raw_Temp(Room1Spi_Cs_Pin,Calib.temp1);
-//			Bme280_Raw_Temp(Room2Spi_Cs_Pin,Calib.temp2);
-//			Bme280_Raw_Temp(Room3Spi_Cs_Pin,Calib.temp3);
-//			Bme280_Raw_Temp(Room4Spi_Cs_Pin,Calib.temp4);
-//			holdingtimeBme280=xTaskGetTickCount();
-//	 }
+
+	//	  Bme280_Init(Room1Spi_Cs_Pin,&chamber1);
+	//	  if(pos==9)
+	//	 HAL_GPIO_WritePin(GPIOC,Room1Spi_Cs_Pin,GPIO_PIN_RESET);
+			Bme280_Raw_Temp(Room1Spi_Cs_Pin,&mBme280.temp1,&chamber1);
+//			Bme280_Raw_Temp(Room2Spi_Cs_Pin,mBme280.temp2);
+//			Bme280_Raw_Temp(Room3Spi_Cs_Pin,mBme280.temp3);
+//			Bme280_Raw_Temp(Room4Spi_Cs_Pin,mBme280.temp4);
+
+
 
 	  Sht31_Temperature();
 	  ReadBmp180PressureData();
@@ -216,6 +218,7 @@ void NRFComFunc(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	NrfDataSending();
     osDelay(1);
   }
   /* USER CODE END NRFComFunc */

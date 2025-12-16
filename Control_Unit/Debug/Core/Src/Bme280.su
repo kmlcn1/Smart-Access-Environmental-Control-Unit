@@ -1,8 +1,6 @@
-../Core/Src/Bme280.c:39:6:Bme280_Init	32	static
-../Core/Src/Bme280.c:75:6:Bme280_Raw_Temp	24	static
-../Core/Src/Bme280.c:107:6:Bme280_Const_Val_Op	8	static
-../Core/Src/Bme280.c:123:8:Bme280_Temp	56	static
-../Core/Src/Bme280.c:136:6:Raw_Temp_Get	8	static
-../Core/Src/Bme280.c:141:6:Spi_Transmit	16	static
-../Core/Src/Bme280.c:147:6:HAL_SPI_TxCpltCallback	16	static
-../Core/Src/Bme280.c:185:6:HAL_SPI_RxCpltCallback	16	static
+../Core/Src/Bme280.c:39:6:Bme280_Init	16	static
+../Core/Src/Bme280.c:73:6:Bme280_Raw_Temp	24	static
+../Core/Src/Bme280.c:110:6:Bme280_Const_Val_Op	16	static
+../Core/Src/Bme280.c:127:8:Bme280_Temp	64	static
+../Core/Src/Bme280.c:140:6:Raw_Temp_Get	8	static
+../Core/Src/Bme280.c:145:6:Spi_Transmit	16	static

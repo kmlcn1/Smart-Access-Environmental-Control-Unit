@@ -85,6 +85,8 @@ void Error_Handler(void);
 #define MotorEn_GPIO_Port GPIOC
 #define NRF_Cs_Pin GPIO_PIN_9
 #define NRF_Cs_GPIO_Port GPIOC
+#define NRFChipEnable_Pin GPIO_PIN_8
+#define NRFChipEnable_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
@@ -97,8 +99,9 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 #define PeriodicTemperatureTimeforSth31				500		// type of milisecond
 #define PeriodicTemperatureTimeforBme280			500		// type of milisecond
-#define PeriodicGetAngleTime						200	// type of milisecond
-#define PeriodicPressureTime						500	// type of milisecond
+#define PeriodicGetAngleTime						200		// type of milisecond
+#define PeriodicPressureTime						500		// type of milisecond
+#define PeriodicNrfDataTransmitionTime				2000	// type of milisecond
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

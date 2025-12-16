@@ -9,7 +9,7 @@
 #define INC_Bme280_H_
 
 #include <stdint.h>
-typedef struct Raw {
+typedef struct _Raw {
 
 	uint8_t temp_msb;
 	uint8_t temp_lsb;
@@ -21,25 +21,25 @@ typedef struct Raw {
 
 }Raw;
 
-typedef struct Calibration{
+typedef struct _Calibration{
 
 	uint16_t dig_T1;
-	uint16_t dig_T2;
-	uint16_t dig_T3;
+	int16_t dig_T2;
+	int16_t dig_T3;
 	uint16_t dig_P1;
-	uint16_t dig_P2;
-	uint16_t dig_P3;
-	uint16_t dig_P4;
-	uint16_t dig_P5;
-	uint16_t dig_P6;
-	uint16_t dig_P7;
-	uint16_t dig_P8;
-	uint16_t dig_P9;
+	int16_t dig_P2;
+	int16_t dig_P3;
+	int16_t dig_P4;
+	int16_t dig_P5;
+	int16_t dig_P6;
+	int16_t dig_P7;
+	int16_t dig_P8;
+	int16_t dig_P9;
 }Calibration;
 
-typedef struct Bme280
+typedef struct _Bme280
 {
-	uint8_t Transmit[2];
+	uint8_t Transmit[4];
 	uint8_t Receive[24];
 	uint8_t Receive_Temp[6];
 	uint8_t Receive_Press[18];
@@ -59,7 +59,7 @@ typedef struct Bme280
 
 }Bme280;
 
-typedef struct Const{
+typedef struct _Const{
 	uint8_t temp_msb;
 	uint8_t temp_lsb;
 	uint8_t temp_xlsb;
@@ -71,7 +71,8 @@ typedef struct Const{
 }Const;
 
 extern Const Adress;
-extern Bme280 Calib;
+extern Bme280 mBme280;
+extern Raw Raw_Temp;
 extern uint8_t Calib_Bme280[24];
 extern uint8_t state;
 extern uint8_t pos;
@@ -79,13 +80,12 @@ extern Calibration chamber1;
 extern Calibration chamber2;
 extern Calibration chamber3;
 extern Calibration chamber4;
-extern uint16_t holdingtimeBme280;
 
-void Bme280_Init(uint16_t num, Calibration mCalibm);
+void Bme280_Init(uint16_t num, Calibration *mCalibm);
 void Spi_Transmit(uint8_t *data);
 void Raw_Temp_Get();
-double Bme280_Temp();
-void Bme280_Raw_Temp(uint16_t row, double temp);
-void Bme280_Const_Val_Op(Calibration mcalib);
+double Bme280_Temp(Calibration *Calib);
+void Bme280_Raw_Temp(uint16_t row, double *temp,Calibration *chamber);
+void Bme280_Const_Val_Op(Calibration *mcalib);
 
 #endif /* INC_Bme280_H_ */

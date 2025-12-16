@@ -1,0 +1,13 @@
+../Core/Src/Nrf2401Plus.c:25:6:NrfInit	3
+../Core/Src/Nrf2401Plus.c:61:6:NrfMode	1
+../Core/Src/Nrf2401Plus.c:69:6:NrfEnableRxPipe	1
+../Core/Src/Nrf2401Plus.c:76:6:NrfPipe	1
+../Core/Src/Nrf2401Plus.c:87:6:NrfAutoAck	1
+../Core/Src/Nrf2401Plus.c:95:6:NrfSetupAdressWidth	1
+../Core/Src/Nrf2401Plus.c:103:6:NrfFreqChannel	2
+../Core/Src/Nrf2401Plus.c:114:6:NrfRFSetup	1
+../Core/Src/Nrf2401Plus.c:122:6:NrfRxPayload	2
+../Core/Src/Nrf2401Plus.c:133:6:NrfSetupAutoRetransmit	1
+../Core/Src/Nrf2401Plus.c:141:6:NrfDataSending	6
+../Core/Src/Nrf2401Plus.c:174:6:NrfDataBuild	3
+../Core/Src/Nrf2401Plus.c:239:6:NrfTransmit	1
