@@ -114,7 +114,7 @@ int main(void)
    InitMpu6050();
    Tmc2208Init();
    Bmp180Init();
-   NrfInit(TX);
+   NrfInit(TX, NRFChipEnable_GPIO_Port, NRFChipEnable_Pin,NRF_Cs_GPIO_Port,NRF_Cs_Pin, &hspi3);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

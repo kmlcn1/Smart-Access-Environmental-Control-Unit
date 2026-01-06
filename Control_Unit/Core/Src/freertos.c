@@ -218,7 +218,9 @@ void NRFComFunc(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	HAL_GPIO_TogglePin(GPIOA, LD2_Pin);
 	NrfDataSending();
+	HAL_GPIO_TogglePin(GPIOA, LD2_Pin);
     osDelay(1);
   }
   /* USER CODE END NRFComFunc */

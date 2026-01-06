@@ -85,7 +85,7 @@ void MX_SPI3_Init(void)
   hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi3.Init.NSS = SPI_NSS_SOFT;
-  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -235,6 +235,9 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
 
     __HAL_LINKDMA(spiHandle,hdmarx,hdma_spi3_rx);
 
+    /* SPI3 interrupt Init */
+    HAL_NVIC_SetPriority(SPI3_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(SPI3_IRQn);
   /* USER CODE BEGIN SPI3_MspInit 1 */
 
   /* USER CODE END SPI3_MspInit 1 */
@@ -289,6 +292,9 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
     /* SPI3 DMA DeInit */
     HAL_DMA_DeInit(spiHandle->hdmatx);
     HAL_DMA_DeInit(spiHandle->hdmarx);
+
+    /* SPI3 interrupt Deinit */
+    HAL_NVIC_DisableIRQ(SPI3_IRQn);
   /* USER CODE BEGIN SPI3_MspDeInit 1 */
 
   /* USER CODE END SPI3_MspDeInit 1 */
@@ -327,15 +333,55 @@ void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
 	}
 	else if( hspi==&hspi3)
 	{
-		if(mNrfCase== (TransmitCase1 + 1) )
+		if(mNrfCase==(IsFifoEmpty1T))
 		{
-			mNrfCase++;
-		//	HAL_GPIO_WritePin(GPIOA, NRF_Cs_Pin, GPIO_PIN_SET);
+			mNrfCase=IsFifoEmpty1R;
+			HAL_SPI_Receive_DMA(mSpi, (uint8_t *) mNrfCom.DummyReceive,sizeof(mNrfCom.DummyReceive));
 		}
-		else if( mNrfCase== (TransmitCase2 + 1))
+		else if( mNrfCase==(ClearFifo1T))
 		{
-			mNrfCase=1;
-	//		HAL_GPIO_WritePin(GPIOA, NRF_Cs_Pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+			mNrfCase=IsFifoEmpty1;
+		}
+		else if(mNrfCase==(IsConfigReset1T))
+		{
+			mNrfCase=IsConfigReset1R;
+			HAL_SPI_Receive_DMA(mSpi, (uint8_t *) mNrfCom.DummyReceive,sizeof(mNrfCom.DummyReceive));
+		}
+		else if( mNrfCase==(TransmitCase1T))
+		{
+			HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+			mNrfCase=IsReceiveACK1;
+		}
+		else if(mNrfCase==(IsReceiveACK1T))
+		{
+			mNrfCase=IsReceiveACK1R;
+			HAL_SPI_Receive_DMA(mSpi, (uint8_t *) mNrfCom.DummyReceive,sizeof(mNrfCom.DummyReceive));
+		}
+		else if(mNrfCase==(IsFifoEmpty2T))
+		{
+			mNrfCase=IsFifoEmpty2R;
+			HAL_SPI_Receive_DMA(mSpi, (uint8_t *) mNrfCom.DummyReceive,sizeof(mNrfCom.DummyReceive));
+		}
+		else if( mNrfCase==(ClearFifo2T))
+		{
+			HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+			mNrfCase=IsFifoEmpty2;
+		}
+		else if(mNrfCase==(IsConfigReset2T))
+		{
+			mNrfCase=IsConfigReset2R;
+			HAL_SPI_Receive_DMA(mSpi, (uint8_t *) mNrfCom.DummyReceive,sizeof(mNrfCom.DummyReceive));
+		}
+		else if( mNrfCase==(TransmitCase2T))
+		{
+			HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+			mNrfCase=IsReceiveACK2;
+		}
+		else if(mNrfCase==(IsReceiveACK2T))
+		{
+			mNrfCase=IsReceiveACK2R;
+			HAL_SPI_Receive_DMA(mSpi, (uint8_t *) mNrfCom.DummyReceive,sizeof(mNrfCom.DummyReceive));
 		}
 	}
 }
@@ -354,6 +400,88 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 			state++;
 		}
 
+	}
+
+	if(hspi==&hspi3)
+	{
+		if(mNrfCase==IsFifoEmpty1R)
+		{
+			HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+			if(mNrfCom.DummyReceive[0] & 0x10)
+			{
+				mNrfCase=IsConfigReset1;
+			}
+			else
+				mNrfCase=ClearFifo1;
+		}
+		else if(mNrfCase==IsConfigReset1R)
+		{
+			HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+
+			if(mNrfCom.DummyReceive[0] != ChNum)
+			{
+				NrfInit(TX, NRFChipEnable_GPIO_Port, NRFChipEnable_Pin,NRF_Cs_GPIO_Port,NRF_Cs_Pin, &hspi3);
+			}
+
+			mNrfCase=TransmitCase1;
+		}
+		else if(mNrfCase==IsReceiveACK1R)
+		{
+			HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+			NrfClearAct();
+
+			if(mNrfCom.DummyReceive[0] & 0x20) // Received Act
+			{
+				mNrfCase=DataBuild2;
+			//	mNrfCase=TransmitCase1;
+			}
+			else if(mNrfCom.DummyReceive[0] & 0x10) // Maximum number of TX retransmit is reacch the max
+			{
+				NrfClearReTransmitCount();
+				mNrfCase=DataBuild1;
+			}
+			else
+				mNrfCase=DataBuild1;
+			//	mNrfCase=DataBuild2;
+		}
+		else if(mNrfCase==IsFifoEmpty2R)
+		{
+			HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+			if(mNrfCom.DummyReceive[0] & 0x10)
+			{
+				mNrfCase=IsConfigReset2;
+			}
+			else
+				mNrfCase=ClearFifo2;
+		}
+		else if(mNrfCase==IsConfigReset2R)
+			{
+				HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+
+				if(mNrfCom.DummyReceive[0] != ChNum)
+				{
+					NrfInit(TX, NRFChipEnable_GPIO_Port, NRFChipEnable_Pin,NRF_Cs_GPIO_Port,NRF_Cs_Pin, &hspi3);
+				}
+
+				mNrfCase=TransmitCase2;
+			}
+		else if(mNrfCase==IsReceiveACK2R)
+		{
+			HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+			NrfClearAct();
+
+			if(mNrfCom.DummyReceive[0] & 0x20)
+			{
+				mNrfCase=DataBuild1;
+			}
+			else if(mNrfCom.DummyReceive[0] & 0x10)
+			{
+				NrfClearReTransmitCount();
+				mNrfCase=DataBuild2;
+			}
+			else
+				mNrfCase=DataBuild2;
+		}
 	}
 }
 /* USER CODE END 1 */

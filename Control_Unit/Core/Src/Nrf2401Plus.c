@@ -7,52 +7,78 @@
 
 #include "Nrf2401Plus.h"
 #include "spi.h"
+#include <string.h>
+#include <stdio.h>
+#include "main.h"
+
+
+#if 	UsingControlCenter
+#include <string>
+#endif
+
+
+#if UsingControlUnit
+#include "cmsis_os.h"
 #include <Bme280.h>
 #include <Bmp180.h>
 #include <Mpu6050.h>
 #include <Sht31.h>
 #include <Tmc2208.h>
-#include <string.h>
-#include <stdio.h>
+#endif
+
+
 
 NrfConst mNrfConst;
 NrfAdress mNrfAdress;
 NrfCom mNrfCom;
-NrfCase mNrfCase=1;
+NrfCase mNrfCase=DataBuild1;
 
 uint32_t holdingtimeNrf=0;
+GPIO_TypeDef* NrfChipSelectPort;
+uint16_t NrfChipSelectPinNum;
+GPIO_TypeDef* NrfChipEnPort;
+uint16_t NrfChipEnablePinNum;
+SPI_HandleTypeDef *mSpi;
+bool NrfReceivingDataFlag=false;
 
-void NrfInit(uint8_t Select)
+void NrfInit(uint8_t Select, GPIO_TypeDef* ChipEnPort, uint16_t ChipEnPin, GPIO_TypeDef* ChipSelectPort, uint16_t ChipSelectPin, SPI_HandleTypeDef *SpiType )
 {
-	HAL_GPIO_WritePin(GPIOA, NRFChipEnable_Pin, GPIO_PIN_SET);	// ChipsEnable pin active
+	mSpi=SpiType;
+	NrfChipEnPort=ChipEnPort;
+	NrfChipEnablePinNum=ChipEnPin;
+	NrfChipSelectPort=ChipSelectPort;
+	NrfChipSelectPinNum	=ChipSelectPin;
+
+	HAL_GPIO_WritePin(NrfChipEnPort, NrfChipEnablePinNum, GPIO_PIN_RESET);	// ChipEnable pin DeActive
+
 	switch(Select)
 	{
 				case  RX :
-					HAL_GPIO_WritePin(GPIOA, NRF_Cs_Pin, GPIO_PIN_RESET);  // CsN pin low
+
 					NrfMode(RxMode);
-					NrfEnableRxPipe(EnRxPipe1);
-					NrfPipe(RxPipe0,0xAABBCCDDEE);
-					NrfPipe(TxPipe0,0xAABBCCDDEE);
-					NrfAutoAck(DisAllAA);
+					NrfEnableRxPipe(EnAAP0);
+					NrfPipe(RxPipe0Adress,RxPipeV);
+					NrfPipe(TxPipe0Adress,TxPipeV);
+					NrfAutoAck(EnRxPipe1);
 					NrfSetupAdressWidth(AdressWidth5);
-					NrfFreqChannel(115);
+					NrfFreqChannel(ChNum);
 					NrfRFSetup(DataRate250kbps,RFOutputPower0dBm);
 					NrfRxPayload(32);
-					HAL_GPIO_WritePin(GPIOA, NRF_Cs_Pin, GPIO_PIN_SET);
+					HAL_GPIO_WritePin(NrfChipEnPort, NrfChipEnablePinNum, GPIO_PIN_SET);
 					break;
 
 				case TX :
-					HAL_GPIO_WritePin(GPIOA, NRF_Cs_Pin, GPIO_PIN_RESET);
-					NrfMode(TxMode);
-					NrfEnableRxPipe(EnRxPipe1);
-					NrfPipe(RxPipe0,0xAABBCCDDEE);
-					NrfPipe(TxPipe0,0xAABBCCDDEE);
-					NrfSetupAutoRetransmit(DisAutoReTransmit);
+
+					NrfEnableRxPipe(EnAAP0);
+					NrfPipe(RxPipe0Adress,RxPipeV);
+					NrfPipe(TxPipe0Adress,TxPipeV);
+					NrfAutoAck(EnRxPipe1);
+					NrfSetupAutoRetransmit(uS500,ReTransmitCount8);
 					NrfSetupAdressWidth(AdressWidth5);
-					NrfFreqChannel(115);
+					NrfFreqChannel(ChNum);
 					NrfRFSetup(DataRate250kbps,RFOutputPower0dBm);
+					NrfMode(TxMode);
 					NrfRxPayload(32);
-					HAL_GPIO_WritePin(GPIOA, NRF_Cs_Pin, GPIO_PIN_SET);
 					break;
 	}
 
@@ -60,82 +86,140 @@ void NrfInit(uint8_t Select)
 
 void NrfMode(uint8_t ModeSelect)
 {
-	mNrfCom.TransmitInit[0]=WriteMode ^ (Config & 0x1F); 	// Write Adress with Map Register(Config)
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	memset(mNrfCom.TransmitInit,0,sizeof(mNrfCom.TransmitInit));
+	mNrfCom.TransmitInit[0]=WriteMode | (Config & 0x1F); 	// Write Adress with Map Register(Config)
 	mNrfCom.TransmitInit[1]=ModeSelect;						// Data
-	mNrfCom.TransmitInit[2]=0x00;
-	HAL_SPI_Transmit(&hspi3, mNrfCom.TransmitInit, 3, 200);
+
+	HAL_SPI_Transmit(mSpi, mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
 }
 
 void NrfEnableRxPipe(uint8_t Enable)
 {
-	mNrfCom.TransmitInit[0]=WriteMode ^ (EnRxPipe & 0x1F); 	// Write Adress with Map Register(Config)
-	mNrfCom.TransmitInit[1]=Enable;						// Data
-	mNrfCom.TransmitInit[2]=0x00;
-	HAL_SPI_Transmit(&hspi2, mNrfCom.TransmitInit, 3, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	memset(mNrfCom.TransmitInit,0,sizeof(mNrfCom.TransmitInit));
+	mNrfCom.TransmitInit[0]=WriteMode | (EnRxPipe & 0x1F);
+	mNrfCom.TransmitInit[1]=Enable;
+
+	HAL_SPI_Transmit(mSpi, mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
 }
-void NrfPipe(uint8_t Adress , uint64_t Activate)
+void NrfPipe(uint8_t Adress1 , uint64_t Activate)
 {
-	mNrfCom.TransmitInit[0]=WriteMode ^ (Adress & 0x1F); 	// Write Adress with Map Register(Config)
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	mNrfCom.TransmitInit[0]=WriteMode | (Adress1 & 0x1F); 	// Write Adress with Map Register(Config)
 	mNrfCom.TransmitInit[1]=Activate >> 32;						// Data
-	mNrfCom.TransmitInit[2]=(Activate >>24 & 0xFF);
-	mNrfCom.TransmitInit[3]=(Activate >>16 & 0xFF);
-	mNrfCom.TransmitInit[4]=(Activate >>8 & 0xFF);
+	mNrfCom.TransmitInit[2]=((Activate >>24) & 0xFF);
+	mNrfCom.TransmitInit[3]=((Activate >>16) & 0xFF);
+	mNrfCom.TransmitInit[4]=((Activate >>8) & 0xFF);
 	mNrfCom.TransmitInit[5]=Activate & 0xFF;
-	HAL_SPI_Transmit(&hspi2, mNrfCom.TransmitInit, 6, 200);
+
+	HAL_SPI_Transmit(mSpi, mNrfCom.TransmitInit, 6, 500);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
 }
 
 void NrfAutoAck(uint8_t Data)
 {
-	mNrfCom.TransmitInit[0]=WriteMode ^ (AutoAck & 0x1F);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	memset(mNrfCom.TransmitInit,0,sizeof(mNrfCom.TransmitInit));
+	mNrfCom.TransmitInit[0]=WriteMode | (AutoAck & 0x1F);
 	mNrfCom.TransmitInit[1]=Data;
-	mNrfCom.TransmitInit[2]=0x00;
-	HAL_SPI_Transmit(&hspi3, mNrfCom.TransmitInit, 3, 200);
+
+	HAL_SPI_Transmit(mSpi, mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
 }
 
 void NrfSetupAdressWidth(uint8_t Width)
 {
-	mNrfCom.TransmitInit[0]=WriteMode ^ (SetupAW & 0x1F);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	memset(mNrfCom.TransmitInit,0,sizeof(mNrfCom.TransmitInit));
+	mNrfCom.TransmitInit[0]=WriteMode | (SetupAW & 0x1F);
 	mNrfCom.TransmitInit[1]=Width;
-	mNrfCom.TransmitInit[2]=0x00;
-	HAL_SPI_Transmit(&hspi3, mNrfCom.TransmitInit, 3, 200);
+
+	HAL_SPI_Transmit(mSpi, mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
 }
 
 void NrfFreqChannel(uint8_t Channel)
 {
+
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
 	if(Channel>125)
 		Channel=125;
 
-	mNrfCom.TransmitInit[0]=WriteMode ^ (RfChanel & 0x1F);
+	memset(mNrfCom.TransmitInit,0,sizeof(mNrfCom.TransmitInit));
+	mNrfCom.TransmitInit[0]=WriteMode | (RfChanel & 0x1F);
 	mNrfCom.TransmitInit[1]=Channel;
-	mNrfCom.TransmitInit[2]=0x00;
-	HAL_SPI_Transmit(&hspi3, mNrfCom.TransmitInit, 3, 200);
+
+	HAL_SPI_Transmit(mSpi, mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
 }
 
 void NrfRFSetup(uint8_t DataRate , uint8_t RfOutputPower)
 {
-	mNrfCom.TransmitInit[0]=WriteMode ^ (RfSetup & 0x1F);
-	mNrfCom.TransmitInit[1]= DataRate ^ (RfOutputPower & 0x07);
-	mNrfCom.TransmitInit[2]=0x00;
-	HAL_SPI_Transmit(&hspi3, mNrfCom.TransmitInit, 3, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	memset(mNrfCom.TransmitInit,0,sizeof(mNrfCom.TransmitInit));
+	mNrfCom.TransmitInit[0]=WriteMode | (RfSetup & 0x1F);
+	mNrfCom.TransmitInit[1]= DataRate | (RfOutputPower & 0x07);
+
+	HAL_SPI_Transmit(mSpi, mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
 }
 
 void NrfRxPayload(uint8_t PayloadSize)
 {
 	if(PayloadSize>32)
 		PayloadSize=32;
-
-	mNrfCom.TransmitInit[0]=WriteMode ^ (RxPayload & 0x1F);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	memset(mNrfCom.TransmitInit,0,sizeof(mNrfCom.TransmitInit));
+	mNrfCom.TransmitInit[0]=WriteMode | (RxPayload & 0x1F);
 	mNrfCom.TransmitInit[1]=PayloadSize;
-	mNrfCom.TransmitInit[2]=0x00;
-	HAL_SPI_Transmit(&hspi3, mNrfCom.TransmitInit, 3, 200);
+
+	HAL_SPI_Transmit(mSpi, mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
 }
 
-void NrfSetupAutoRetransmit(uint8_t Value)
+void NrfSetupAutoRetransmit(uint8_t Delay, uint8_t ReTransCount)
 {
-	mNrfCom.TransmitInit[0]=WriteMode ^ (SetupReTR & 0x1F);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	memset(mNrfCom.TransmitInit,0,sizeof(mNrfCom.TransmitInit));
+	mNrfCom.TransmitInit[0]=WriteMode | (SetupReTR & 0x1F);
+	mNrfCom.TransmitInit[1]=((Delay & 0xF) << 4 ) | (ReTransCount & 0xF) ;
+
+	HAL_SPI_Transmit(mSpi, mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+}
+
+void NrfSetupFeature(uint8_t Value)
+{
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	memset(mNrfCom.TransmitInit,0,sizeof(mNrfCom.TransmitInit));
+	mNrfCom.TransmitInit[0]=WriteMode | (Feature & 0x1F);
 	mNrfCom.TransmitInit[1]=Value;
-	mNrfCom.TransmitInit[2]=0x00;
-	HAL_SPI_Transmit(&hspi3, mNrfCom.TransmitInit, 3, 200);
+
+	HAL_SPI_Transmit(mSpi, mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+}
+
+void NrfClearAct()
+{
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	mNrfCom.TransmitInit[0]=WriteMode | (Status & 0x1F);
+	mNrfCom.TransmitInit[1]=ClearAct;
+
+	HAL_SPI_Transmit(mSpi, (uint8_t *) mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
+}
+
+void NrfClearReTransmitCount()
+{
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	mNrfCom.TransmitInit[0]=WriteMode | (Status & 0x1F);
+	mNrfCom.TransmitInit[1]=ClearReTransmit;
+
+	HAL_SPI_Transmit(mSpi, (uint8_t *) mNrfCom.TransmitInit, 2, 200);
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
 }
 
 void NrfDataSending()
@@ -144,27 +228,63 @@ void NrfDataSending()
 	{
 		switch(mNrfCase)
 		{
-			case  DataBuild1 :
+			case DataBuild1 :
 
-				NrfDataBuild(TxPayloadNoActW,FirstSendingData);
+				NrfDataBuild(TxPayloadW,FirstSendingData);
 				break;
 
-			case  TransmitCase1 :
+			case IsFifoEmpty1 :
+
+				ReadFifo();
+				break;
+
+			case ClearFifo1 :
+
+				ClearFifo(FlushTx);
+				break;
+
+			case IsConfigReset1:
+				ReadChannel();
+				break;
+
+			case TransmitCase1 :
 
 				NrfTransmit();
 				break;
 
-			case  DataBuild2 :
+			case IsReceiveACK1 :
 
-				NrfDataBuild(TxPayloadNoActW,SecondSendingData);
+				ReadStatus();
 				break;
 
-			case  TransmitCase2 :
+			case DataBuild2 :
+
+				NrfDataBuild(TxPayloadW,SecondSendingData);
+				break;
+
+			case IsFifoEmpty2 :
+
+				ReadFifo();
+				break;
+
+			case ClearFifo2 :
+
+				ClearFifo(FlushTx);
+				break;
+
+			case IsConfigReset2:
+
+				ReadChannel();
+				break;
+
+			case TransmitCase2 :
 
 				NrfTransmit();
+				break;
+
+			case IsReceiveACK2 :
+				ReadStatus();
 				holdingtimeNrf=xTaskGetTickCount();
-				mNrfCase=DataBuild1;
-				HAL_GPIO_WritePin(GPIOA, NRF_Cs_Pin, GPIO_PIN_SET);
 				break;
 		}
 	}
@@ -179,6 +299,8 @@ void NrfDataBuild(uint8_t TxType , uint8_t Selection)
 	char buffer[20];
 	memset(mNrfCom.Transmit,0,sizeof(mNrfCom.Transmit));
 	mNrfCom.Transmit[0]=TxType;
+	//HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+
 	switch(Selection)
 	{
 		case FirstSendingData :
@@ -238,10 +360,52 @@ void NrfDataBuild(uint8_t TxType , uint8_t Selection)
 
 void NrfTransmit()
 {
-	HAL_GPIO_WritePin(GPIOA, NRF_Cs_Pin, GPIO_PIN_RESET);
-	//HAL_SPI_Transmit_DMA(&hspi3, (uint8_t *) mNrfCom.Transmit, strlen(mNrfCom.Transmit));
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	mNrfCase++;
+	HAL_SPI_Transmit_DMA(mSpi, (uint8_t *) mNrfCom.Transmit, 33);
+}
 
-	HAL_SPI_Transmit(&hspi3, (uint8_t *) mNrfCom.Transmit, strlen(mNrfCom.Transmit),200);
+void ClearFifo(uint8_t Type)
+{
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
 	mNrfCase++;
+	mNrfCom.DummyTransmit=Type;
+	HAL_SPI_Transmit_DMA(mSpi, (uint8_t *)&mNrfCom.DummyTransmit, sizeof(mNrfCom.DummyTransmit));
+}
+
+void ReadFifo()
+{
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
 	mNrfCase++;
+	mNrfCom.DummyTransmit=FifoStatus;
+	HAL_SPI_Transmit_DMA(mSpi, (uint8_t *)&mNrfCom.DummyTransmit, sizeof(mNrfCom.DummyTransmit));
+}
+
+void ReadStatus()
+{
+	//Delay for transmitting data
+
+	HAL_GPIO_WritePin(NrfChipEnPort, NrfChipEnablePinNum, GPIO_PIN_SET);
+	vTaskDelay(pdMS_TO_TICKS(4));
+	HAL_GPIO_WritePin(NrfChipEnPort, NrfChipEnablePinNum, GPIO_PIN_RESET);
+
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	mNrfCase++;
+	mNrfCom.DummyTransmit=Status;
+	HAL_SPI_Transmit_DMA(mSpi, (uint8_t *)&mNrfCom.DummyTransmit, sizeof(mNrfCom.DummyTransmit));
+}
+
+void ReadChannel()
+{
+	HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_RESET);
+	mNrfCase++;
+	mNrfCom.DummyTransmit=RfChanel;
+	HAL_SPI_Transmit_DMA(mSpi, (uint8_t *)&mNrfCom.DummyTransmit, sizeof(mNrfCom.DummyTransmit));
+}
+
+void NRFDelayMicroSeconds(uint32_t uSec)
+{
+	uint32_t uSecVar = uSec;
+	uSecVar = uSecVar* ((SystemCoreClock/1000000)/3);
+	while(uSecVar--);
 }
