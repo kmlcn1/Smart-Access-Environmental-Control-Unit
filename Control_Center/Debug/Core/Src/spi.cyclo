@@ -1,0 +1,4 @@
+../Core/Src/spi.cpp:34:6:void MX_SPI2_Init()	2
+../Core/Src/spi.cpp:66:6:void HAL_SPI_MspInit(SPI_HandleTypeDef*)	4
+../Core/Src/spi.cpp:152:6:void HAL_SPI_MspDeInit(SPI_HandleTypeDef*)	2
+../Core/Src/spi.cpp:187:6:void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef*)	7
