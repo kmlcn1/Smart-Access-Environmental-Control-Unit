@@ -15,7 +15,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-
+Bme280Const mBme280Const;
 Raw Raw_Temp;
 Bme280 mBme280;
 Calibration chamber1;
@@ -45,71 +45,53 @@ void Bme280_Init(uint16_t num, Calibration *mCalibm)
 	{
 		switch(pos)
 			{
-				case 1:
-
-					mBme280.Transmit[0]= 0x74; 	// ctr_meas (0xF4)
-					mBme280.Transmit[1]= 0x57;	//	 010 | 101 | 11
-					mBme280.Transmit[2]= 0x75; 	// config (0xF5)
-					mBme280.Transmit[3]= 0x16;	//	000 | 100 | 0 | 0
-					HAL_SPI_Transmit(&hspi2,mBme280.Transmit,sizeof(mBme280.Transmit),200);
-					pos++;
+				case SetRegister:
+					Bme280SetReg(RegCtrMeas,RegCtrMeasSettings,RegConfig,RegConfigSettings);
 					break;
 
-				case 2:
-					pos++;
-					HAL_SPI_Transmit_IT(&hspi2, &Calib_Bme280[0],sizeof(Calib_Bme280[0]));
+				case GetCalibValue:
+					SpiTransmitInit(&Calib_Bme280[0]);
 					break;
 
-				case 5:
-					HAL_GPIO_WritePin(GPIOC,num,GPIO_PIN_SET);
+				case CreateDigitalValue:
 					Bme280_Const_Val_Op(mCalibm);
-					pos++;
 					break;
 			}
 	}
+
+	HAL_GPIO_WritePin(GPIOC,num,GPIO_PIN_SET);
 
 }
 
 void Bme280_Raw_Temp(uint16_t row, double *temp,Calibration *chamber )
 {
 	 if(pos==6 && (xTaskGetTickCount() - holdingtimeBme280>= pdMS_TO_TICKS(PeriodicTemperatureTimeforBme280)))
-		 {
+	 {
+		 HAL_GPIO_WritePin(GPIOC,row,GPIO_PIN_RESET);
+
 			switch(state)
 			{
-				case 1:
-					HAL_GPIO_WritePin(GPIOC,row,GPIO_PIN_RESET);
-					state++;
+				case AllTempRegister:
 					Spi_Transmit(&Adress.temp_msb);
 					break;
-				case 4:
-					state++;
-					Spi_Transmit(&Adress.temp_lsb);
-					break;
-				case 7:
-					state++;
-					Spi_Transmit(&Adress.temp_xlsb);
-					break;
-				case 10:
-					state++;
+
+				case GetRawTemp:
 					Raw_Temp_Get();
 					break;
-				case 11:
-					HAL_GPIO_WritePin(GPIOC,row,GPIO_PIN_SET);
-			//		osDelay(500);
+
+				case Bme280CompletionProcess:
 					*temp=Bme280_Temp(chamber);
-					state=1;
-					holdingtimeBme280=xTaskGetTickCount();
+					HAL_GPIO_WritePin(GPIOC,row,GPIO_PIN_SET);
 					break;
-
-
 			}
-		 }
+
+
+	 }
 
 }
 
 void Bme280_Const_Val_Op(Calibration *mcalib)
 {
-
 	mcalib->dig_T1=	mBme280.Receive[1]<<8 | mBme280.Receive[0];
 	mcalib->dig_T2=	mBme280.Receive[3]<<8 | mBme280.Receive[2];
 	mcalib->dig_T3=	mBme280.Receive[5]<<8 | mBme280.Receive[4];
@@ -122,30 +104,46 @@ void Bme280_Const_Val_Op(Calibration *mcalib)
 	mcalib->dig_P7=	mBme280.Receive[19]<<8 | mBme280.Receive[18];
 	mcalib->dig_P8=	mBme280.Receive[21]<<8 | mBme280.Receive[20];
 	mcalib->dig_P9=	mBme280.Receive[23]<<8 | mBme280.Receive[22];
+	pos++;
 }
 
 double Bme280_Temp(Calibration *Calib)
 {
-	double var1, var2, T, t_fine;
+	double var1, var2, T;
 
 	var1 = ((Raw_Temp.adc) / 16384.0 - ((double)Calib->dig_T1) / 1024.0) * ((double)Calib->dig_T2);
 	var2 = (((Raw_Temp.adc) / 131072.0 - ((double)Calib->dig_T1) / 8192.0) *
 	        ((Raw_Temp.adc) / 131072.0 - ((double)Calib->dig_T1) / 8192.0)) * ((double)Calib->dig_T3);
-	t_fine = var1 + var2;
 	T = (var1 + var2) / 5120.0;
+	state=1;
+	holdingtimeBme280=xTaskGetTickCount();
 	return T;
-
-
 }
 void Raw_Temp_Get()
 {
 	Raw_Temp.adc= Raw_Temp.temp_msb << 12 | Raw_Temp.temp_lsb << 4 | Raw_Temp.temp_xlsb >> 4;
+	state++;
 }
 
 void Spi_Transmit(uint8_t *data)
 {
+	state++;
 	HAL_SPI_Transmit_DMA(&hspi2, data,sizeof(*data));
-
 }
 
+void SpiTransmitInit(uint8_t *data)
+{
+	pos++;
+	HAL_SPI_Transmit_DMA(&hspi2, data,sizeof(*data));
+}
 
+void Bme280SetReg(uint8_t Reg1, uint8_t Val1, uint8_t Reg2, uint8_t Val2)
+{
+	mBme280.Transmit[0]= Reg1;
+	mBme280.Transmit[1]= Val1;
+	mBme280.Transmit[2]= Reg2;
+	mBme280.Transmit[3]= Val2;
+
+	HAL_SPI_Transmit(&hspi2,mBme280.Transmit,sizeof(mBme280.Transmit),250);
+	pos++;
+}

@@ -2,5 +2,5 @@
 ../Core/Src/spi.c:71:6:MX_SPI3_Init	2
 ../Core/Src/spi.c:103:6:HAL_SPI_MspInit	7
 ../Core/Src/spi.c:247:6:HAL_SPI_MspDeInit	3
-../Core/Src/spi.c:305:6:HAL_SPI_TxCpltCallback	17
-../Core/Src/spi.c:389:6:HAL_SPI_RxCpltCallback	21
+../Core/Src/spi.c:305:6:HAL_SPI_TxCpltCallback	15
+../Core/Src/spi.c:376:6:HAL_SPI_RxCpltCallback	19

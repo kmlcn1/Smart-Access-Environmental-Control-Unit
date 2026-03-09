@@ -1,6 +1,8 @@
 ../Core/Src/Bme280.c:39:6:Bme280_Init	16	static
-../Core/Src/Bme280.c:73:6:Bme280_Raw_Temp	24	static
-../Core/Src/Bme280.c:110:6:Bme280_Const_Val_Op	16	static
-../Core/Src/Bme280.c:127:8:Bme280_Temp	64	static
-../Core/Src/Bme280.c:140:6:Raw_Temp_Get	8	static
-../Core/Src/Bme280.c:145:6:Spi_Transmit	16	static
+../Core/Src/Bme280.c:66:6:Bme280_Raw_Temp	24	static
+../Core/Src/Bme280.c:93:6:Bme280_Const_Val_Op	16	static
+../Core/Src/Bme280.c:110:8:Bme280_Temp	56	static
+../Core/Src/Bme280.c:122:6:Raw_Temp_Get	8	static
+../Core/Src/Bme280.c:128:6:Spi_Transmit	16	static
+../Core/Src/Bme280.c:134:6:SpiTransmitInit	16	static
+../Core/Src/Bme280.c:140:6:Bme280SetReg	24	static

@@ -168,19 +168,13 @@ void TempFunc(void const * argument)
   for(;;)
   {
 
-	//	  Bme280_Init(Room1Spi_Cs_Pin,&chamber1);
-	//	  if(pos==9)
-	//	 HAL_GPIO_WritePin(GPIOC,Room1Spi_Cs_Pin,GPIO_PIN_RESET);
-			Bme280_Raw_Temp(Room1Spi_Cs_Pin,&mBme280.temp1,&chamber1);
-//			Bme280_Raw_Temp(Room2Spi_Cs_Pin,mBme280.temp2);
-//			Bme280_Raw_Temp(Room3Spi_Cs_Pin,mBme280.temp3);
-//			Bme280_Raw_Temp(Room4Spi_Cs_Pin,mBme280.temp4);
-
-
-
-	  Sht31_Temperature();
-	  ReadBmp180PressureData();
-	  osDelay(1);
+	Bme280_Raw_Temp(Room1Spi_Cs_Pin,&mBme280.temp1,&chamber1);
+//	Bme280_Raw_Temp(Room2Spi_Cs_Pin,mBme280.temp2);
+//	Bme280_Raw_Temp(Room3Spi_Cs_Pin,mBme280.temp3);
+//	Bme280_Raw_Temp(Room4Spi_Cs_Pin,mBme280.temp4);
+	Sht31_Temperature();
+	ReadBmp180PressureData();
+	osDelay(1);
   }
   /* USER CODE END TempFunc */
 }

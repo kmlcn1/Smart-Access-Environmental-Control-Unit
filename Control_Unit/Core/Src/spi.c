@@ -308,27 +308,14 @@ void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
 	{
 		if( pos==3 )
 		{
-			HAL_SPI_Receive_DMA(&hspi2, mBme280.Receive, sizeof(mBme280.Receive));
 			pos++;
+			HAL_SPI_Receive_DMA(&hspi2, mBme280.Receive, sizeof(mBme280.Receive));
 		}
 
 		if(state==2)
 		{
-	//		HAL_SPI_Receive_IT(&hspi2,(uint8_t*)&Raw_Temp,sizeof(Raw_Temp.temp_msb)+sizeof(Raw_Temp.temp_lsb)+sizeof(Raw_Temp.temp_xlsb));
-			HAL_SPI_Receive_IT(&hspi2, &Raw_Temp.temp_msb,sizeof(Raw_Temp.temp_msb));
 			state++;
-		}
-
-		else if(state==5)
-		{
-			HAL_SPI_Receive_IT(&hspi2, &Raw_Temp.temp_lsb,sizeof(Raw_Temp.temp_lsb));
-			state++;
-		}
-
-		else if(state==8)
-		{
-			HAL_SPI_Receive_IT(&hspi2, &Raw_Temp.temp_xlsb,sizeof(Raw_Temp.temp_xlsb));
-			state++;
+			HAL_SPI_Receive_DMA(&hspi2, mBme280.Receive_Temp,sizeof(mBme280.Receive_Temp));
 		}
 	}
 	else if( hspi==&hspi3)
@@ -395,8 +382,11 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 			pos++;
 		}
 
-		if((state==3) || (state==6) || (state==9))
+		if(state==3)
 		{
+			Raw_Temp.temp_msb = mBme280.Receive_Temp[0];
+			Raw_Temp.temp_lsb = mBme280.Receive_Temp[1];
+			Raw_Temp.temp_xlsb = mBme280.Receive_Temp[2];
 			state++;
 		}
 
