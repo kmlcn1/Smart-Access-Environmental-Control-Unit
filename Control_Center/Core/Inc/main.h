@@ -77,6 +77,7 @@ void Error_Handler(void);
 #define SWO_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+#define PerioadicLcdExampleTime					1000
 #define PeriodicNrfDataReceiveTime 				50
 /* USER CODE END Private defines */
 

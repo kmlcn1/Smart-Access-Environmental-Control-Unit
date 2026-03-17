@@ -19,16 +19,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dma.h"
+#include "i2c.h"
 #include "spi.h"
 #include "usart.h"
 #include "gpio.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <Lcd.h>
 #include "Nrf2401Plus.h"
-
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,8 +93,14 @@ int main(void)
   MX_DMA_Init();
   MX_USART2_UART_Init();
   MX_SPI2_Init();
+  MX_I2C1_Init();
+  MX_I2C2_Init();
+  MX_SPI3_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  	mLcd.Init();
 	NrfInit(RX, NrfChipEn_GPIO_Port,NrfChipEn_Pin,NrfChipSelect_GPIO_Port,NrfChipSelect_Pin,&hspi2);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -104,7 +108,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+	   mLcd.Example();
 	  NrfDataReceiving();
     /* USER CODE BEGIN 3 */
   }
