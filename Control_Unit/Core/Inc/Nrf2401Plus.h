@@ -105,6 +105,7 @@ typedef enum _NrfCase {
 	ReadStatusFifoTR=			0x22,
 	NrfReceive=					0x23,
 	NrfReceiveTR=				0x24,
+	NrfParse=					0x25,
 
 }NrfCase;
 

@@ -13,9 +13,9 @@
 ../Core/Src/Nrf2401Plus.c:215:6:NrfClearReTransmitCount	8	static
 ../Core/Src/Nrf2401Plus.c:225:6:NrfDataSending	8	static
 ../Core/Src/Nrf2401Plus.c:294:6:NrfDataBuild	40	static
-../Core/Src/Nrf2401Plus.c:361:6:NrfTransmit	8	static
-../Core/Src/Nrf2401Plus.c:368:6:ClearFifo	16	static
-../Core/Src/Nrf2401Plus.c:376:6:ReadFifo	8	static
-../Core/Src/Nrf2401Plus.c:384:6:ReadStatus	8	static
-../Core/Src/Nrf2401Plus.c:398:6:ReadChannel	8	static
-../Core/Src/Nrf2401Plus.c:406:6:NRFDelayMicroSeconds	24	static
+../Core/Src/Nrf2401Plus.c:367:6:NrfTransmit	8	static
+../Core/Src/Nrf2401Plus.c:374:6:ClearFifo	16	static
+../Core/Src/Nrf2401Plus.c:382:6:ReadFifo	8	static
+../Core/Src/Nrf2401Plus.c:390:6:ReadStatus	8	static
+../Core/Src/Nrf2401Plus.c:404:6:ReadChannel	8	static
+../Core/Src/Nrf2401Plus.c:412:6:NRFDelayMicroSeconds	24	static

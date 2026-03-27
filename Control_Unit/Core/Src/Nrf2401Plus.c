@@ -293,7 +293,7 @@ void NrfDataSending()
 
 void NrfDataBuild(uint8_t TxType , uint8_t Selection)
 {
-	// "ST:21.56-P:12300-RT:23.45-DL:32"
+	// "ST:21.56-P:12300-RT:23.45-DL:32-"
 	// "GX:2-GY:3-GZ:5-DL:20"
 
 	char buffer[20];
@@ -331,6 +331,7 @@ void NrfDataBuild(uint8_t TxType , uint8_t Selection)
 
 		case SecondSendingData :
 
+			mNrfCom.Transmit[1]=Selection;
 			strcat((mNrfCom.Transmit),"GX:");
 
 			memset(buffer,0,sizeof(buffer));
@@ -345,6 +346,11 @@ void NrfDataBuild(uint8_t TxType , uint8_t Selection)
 
 			memset(buffer,0,sizeof(buffer));
 			sprintf(buffer,"%d",mMpu6050.GyroZ);
+			strcat(mNrfCom.Transmit,buffer);
+			strcat(mNrfCom.Transmit,"-T:");
+
+			memset(buffer,0,sizeof(buffer));
+			sprintf(buffer,"%d",PeriodicNrfDataTransmitionTime);
 			strcat(mNrfCom.Transmit,buffer);
 
 			strcat(mNrfCom.Transmit,"-DL:");
