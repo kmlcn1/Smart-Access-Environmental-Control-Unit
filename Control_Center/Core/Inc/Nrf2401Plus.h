@@ -106,6 +106,7 @@ typedef enum _NrfCase {
 	ReadStatusFifoTR=			0x22,
 	NrfReceive=					0x23,
 	NrfReceiveTR=				0x24,
+	NrfParse=					0x25, // diğer yer aktar
 
 }NrfCase;
 
@@ -129,6 +130,7 @@ extern NrfAdress mNrfAdress;
 extern NrfConst mNrfConst;
 extern NrfCom mNrfCom;
 extern uint32_t holdingtimeNrf;
+extern int NrfTimeOut;
 extern GPIO_TypeDef* NrfChipSelectPort;
 extern uint16_t NrfChipSelectPinNum;
 extern GPIO_TypeDef* NrfChipEnPort;
@@ -152,8 +154,10 @@ void NrfClearReTransmitCount();
 void NrfDataReceiving();
 void ReadingRxFifo();
 void NrfGetData(uint8_t *i);
+void NrfParseData();
 void NrfReadingCommand(uint8_t Command);
 void ReadFifo();
 void ReadChannel();
+void NRFDelayMicroSeconds(uint32_t uSec);
 
 #endif /* NRF2401PLUS_H_ */

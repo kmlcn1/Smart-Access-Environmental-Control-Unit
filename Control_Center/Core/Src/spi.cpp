@@ -23,6 +23,7 @@
 /* USER CODE BEGIN 0 */
 #include "Nrf2401Plus.h"
 #include <stdbool.h>
+#include <SensorsData.h>
 /* USER CODE END 0 */
 
 SPI_HandleTypeDef hspi2;
@@ -299,12 +300,14 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 
 			if(mNrfCom.DummyReceive[1] & 0x02 )
 			{
-
 				HAL_GPIO_WritePin(GPIOA, LD2_Pin, GPIO_PIN_SET);
 				mNrfCase=NrfReceive;
+				SensorsData.Get.NrfReceive=true;
+				NrfTimeOut=0;
 			}
 			else
 			{
+				SensorsData.Get.NrfReceive=false;
 				mNrfCase=IsConfigReset;
 			}
 
@@ -312,7 +315,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 		else if(mNrfCase == NrfReceiveTR)
 		{
 			HAL_GPIO_WritePin(NrfChipSelectPort, NrfChipSelectPinNum, GPIO_PIN_SET);
-			mNrfCase=IsConfigReset;
+			mNrfCase=NrfParse;
 		}
 
 	}

@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include <Lcd.h>
 #include "Nrf2401Plus.h"
+#include <SensorsData.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -108,8 +109,9 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	   mLcd.Example();
+	  // mLcd.Example();
 	  NrfDataReceiving();
+	  SensorsData.ShowAllData();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

@@ -13,6 +13,7 @@
 
 #if UsingControlCenter
 #include <string>
+#include <SensorsData.h>
 #endif
 
 
@@ -32,6 +33,7 @@ NrfCom mNrfCom;
 NrfCase mNrfCase=IsConfigReset;
 
 uint32_t holdingtimeNrf=0;
+int NrfTimeOut=0;
 GPIO_TypeDef* NrfChipSelectPort;
 uint16_t NrfChipSelectPinNum;
 GPIO_TypeDef* NrfChipEnPort;
@@ -241,6 +243,9 @@ void NrfDataReceiving()
 				ReadingRxFifo();
 				break;
 
+			case NrfParse :
+				NrfParseData();
+				break;
 		}
 
 		holdingtimeNrf=0;
@@ -301,9 +306,67 @@ void NrfGetData(uint8_t *i)
 
 }
 
-void NrfParsData()
+void NrfParseData()
 {
+	std::string NrfPtr(mNrfCom.Receive,strlen(mNrfCom.Receive));
+	int Pos1=0;
+	int Pos2=0;
+	int DataLength = NrfPtr.length();
 
+	if(DataLength>33) DataLength=33;
+
+	while(Pos2 < DataLength - 1)
+	{
+		Pos1=NrfPtr.find(':', Pos1 + 1);
+		Pos2=NrfPtr.find('-', Pos2 + 1);
+
+
+		if(Pos1<0 || Pos2<0)
+		{
+
+			SensorsData.Get.ParseFlag=false;  // Transmit Nrf sended wrong type
+			break;
+		}
+		else if(*(mNrfCom.Receive+1)== SecondSendingData)
+		{
+			if(NrfPtr.substr(Pos1-2, 2)=="GX")
+			{
+				SensorsData.Get.GX= std::stof(NrfPtr.substr(Pos1 + 1, Pos2-Pos1-1));
+			}
+			else if(NrfPtr.substr(Pos1-2, 2)=="GY")
+			{
+				SensorsData.Get.GY= std::stof(NrfPtr.substr(Pos1 + 1, Pos2-Pos1-1));
+			}
+			else if(NrfPtr.substr(Pos1-2, 2)=="GZ")
+			{
+				SensorsData.Get.GZ= std::stof(NrfPtr.substr(Pos1 + 1, Pos2-Pos1-1));
+			}
+			else if(NrfPtr.substr(Pos1-1, 1)=="T")
+			{
+				SensorsData.Get.NrfTimeout= std::stof(NrfPtr.substr(Pos1 + 1, Pos2-Pos1-1));
+			}
+		}
+		else
+		{
+			if(NrfPtr.substr(Pos1-2, 2)=="ST")
+			{
+				SensorsData.Get.SecTemp= std::stof(NrfPtr.substr(Pos1 + 1, Pos2-Pos1-1));
+			}
+			else if(NrfPtr.substr(Pos1-1, 1)=="P")
+			{
+				SensorsData.Get.Press= std::stoi(NrfPtr.substr(Pos1 + 1, Pos2-Pos1-1));
+				SensorsData.PressToHeight(SensorsData.Get.Press);
+			}
+			else if(NrfPtr.substr(Pos1-2, 2)=="RT")
+			{
+				SensorsData.Get.RoomTemp= std::stof(NrfPtr.substr(Pos1 + 1, Pos2-Pos1-1));
+			}
+		}
+
+		SensorsData.Get.ParseFlag=true;
+	}
+
+	mNrfCase=IsConfigReset;
 
 }
 
@@ -313,7 +376,6 @@ void ReadFifo()
 	mNrfCom.DummyTransmit=FifoStatus;
 	mNrfCase=ReadStatusFifoTR;
 	HAL_SPI_TransmitReceive_DMA(&hspi2, (uint8_t *)&mNrfCom.DummyTransmit,(uint8_t *)mNrfCom.DummyReceive, 2);
-
 }
 
 void ReadChannel()

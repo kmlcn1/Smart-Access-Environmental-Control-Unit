@@ -1,0 +1,6 @@
+../Core/Inc/SensorsData.h:29:10:constexpr mSensorsData::mConst::mConst()	1
+../Core/Inc/SensorsData.h:11:7:mSensorsData::mSensorsData()	1
+../Core/Src/SensorsData.cpp:17:6:void mSensorsData::ShowAllData()	7
+../Core/Src/SensorsData.cpp:55:6:void mSensorsData::PressToHeight(int)	2
+../Core/Src/SensorsData.cpp:66:1:void __static_initialization_and_destruction_0(int, int)	3
+../Core/Src/SensorsData.cpp:66:1:cpp)	1

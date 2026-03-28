@@ -1,5 +1,6 @@
 "./Core/Src/Lcd.o"
 "./Core/Src/Nrf2401Plus.o"
+"./Core/Src/SensorsData.o"
 "./Core/Src/dma.o"
 "./Core/Src/gpio.o"
 "./Core/Src/i2c.o"

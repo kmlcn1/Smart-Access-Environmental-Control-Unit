@@ -123,15 +123,15 @@ void Lcd::Init()
 
 void Lcd::Example()
 {
-	if(mLcd.HoldingTime - PerioadicLcdExampleTime >0)
-	{
+	//if(mLcd.HoldingTime - PerioadicLcdExampleTime >0)
+	//{
 
 		mLcd.Print("        " ,
-				   "   Hello" ,
-				   "   World" ,
+				   "   Hello Heloo" ,
+				   "   World Word" ,
 				   "        " );
 
-	}
+//	}
 
 }
 

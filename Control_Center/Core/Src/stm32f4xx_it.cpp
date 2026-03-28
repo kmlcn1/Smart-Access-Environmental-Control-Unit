@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "Nrf2401Plus.h"
 #include <Lcd.h>
+#include <SensorsData.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -198,7 +199,8 @@ void SysTick_Handler(void)
 
 	holdingtimeNrf++;
 	mLcd.HoldingTime++;
-
+	if(SensorsData.Get.NrfReceive==false)
+		NrfTimeOut++;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */

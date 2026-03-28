@@ -1,5 +1,5 @@
-../Core/Src/spi.cpp:34:6:void MX_SPI2_Init()	2
-../Core/Src/spi.cpp:66:6:void MX_SPI3_Init()	2
-../Core/Src/spi.cpp:98:6:void HAL_SPI_MspInit(SPI_HandleTypeDef*)	5
-../Core/Src/spi.cpp:220:6:void HAL_SPI_MspDeInit(SPI_HandleTypeDef*)	3
-../Core/Src/spi.cpp:277:6:void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef*)	7
+../Core/Src/spi.cpp:35:6:void MX_SPI2_Init()	2
+../Core/Src/spi.cpp:67:6:void MX_SPI3_Init()	2
+../Core/Src/spi.cpp:99:6:void HAL_SPI_MspInit(SPI_HandleTypeDef*)	5
+../Core/Src/spi.cpp:221:6:void HAL_SPI_MspDeInit(SPI_HandleTypeDef*)	3
+../Core/Src/spi.cpp:278:6:void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef*)	7
