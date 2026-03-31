@@ -323,7 +323,6 @@ void NrfParseData()
 
 		if(Pos1<0 || Pos2<0)
 		{
-
 			SensorsData.Get.ParseFlag=false;  // Transmit Nrf sended wrong type
 			break;
 		}

@@ -28,6 +28,7 @@
 #include <Lcd.h>
 #include "Nrf2401Plus.h"
 #include <SensorsData.h>
+#include <Rtc.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,6 +101,7 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   	mLcd.Init();
+  	Rtc.Init();
 	NrfInit(RX, NrfChipEn_GPIO_Port,NrfChipEn_Pin,NrfChipSelect_GPIO_Port,NrfChipSelect_Pin,&hspi2);
 
   /* USER CODE END 2 */
@@ -111,6 +113,7 @@ int main(void)
     /* USER CODE END WHILE */
 	  // mLcd.Example();
 	  NrfDataReceiving();
+	  Rtc.GetDate();
 	  SensorsData.ShowAllData();
     /* USER CODE BEGIN 3 */
   }

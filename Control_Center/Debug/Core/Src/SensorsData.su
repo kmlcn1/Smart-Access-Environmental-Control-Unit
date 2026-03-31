@@ -1,6 +1,6 @@
-../Core/Inc/SensorsData.h:29:10:constexpr mSensorsData::mConst::mConst()	16	static
+../Core/Inc/SensorsData.h:30:10:constexpr mSensorsData::mConst::mConst()	16	static
 ../Core/Inc/SensorsData.h:11:7:mSensorsData::mSensorsData()	16	static
-../Core/Src/SensorsData.cpp:17:6:void mSensorsData::ShowAllData()	136	static
-../Core/Src/SensorsData.cpp:55:6:void mSensorsData::PressToHeight(int)	40	static
-../Core/Src/SensorsData.cpp:66:1:void __static_initialization_and_destruction_0(int, int)	16	static
-../Core/Src/SensorsData.cpp:66:1:cpp)	8	static
+../Core/Src/SensorsData.cpp:18:6:void mSensorsData::ShowAllData()	160	static
+../Core/Src/SensorsData.cpp:72:6:void mSensorsData::PressToHeight(int)	40	static
+../Core/Src/SensorsData.cpp:83:1:void __static_initialization_and_destruction_0(int, int)	16	static
+../Core/Src/SensorsData.cpp:83:1:cpp)	8	static

@@ -9,6 +9,8 @@
 #include <string>
 #include "string.h"
 #include "stdio.h"
+#include <SensorsData.h>
+
 
 Lcd mLcd;
 
@@ -62,7 +64,7 @@ void Lcd::Print(const char *data1 ,const char *data2,
 
 
 	}
-
+	SensorsData.Get.CaseNum ++;
 }
 
 void Lcd::Init()

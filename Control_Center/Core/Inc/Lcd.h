@@ -30,14 +30,14 @@ class Lcd
 			LcdDispOnCurserOff=		0x0C,
 			LcdClearDisp=			0x01,
 			LcdEntrySet=			0x06,
-			HighCase=0,
-			HighCaseT=1,
-			EnPulseTHigh=2,
-			LowCase=3,
-			lowCaseT=4,
-			EnPulseTLow=5,
-			ComplateTransmit=6,
-			C=4,
+			HighCase=					0,
+			HighCaseT=					1,
+			EnPulseTHigh=				2,
+			LowCase=					3,
+			lowCaseT=					4,
+			EnPulseTLow=				5,
+			ComplateTransmit=			6,
+			C=							4,
 
 		};
 

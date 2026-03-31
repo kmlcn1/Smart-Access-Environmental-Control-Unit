@@ -79,6 +79,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 #define PerioadicLcdTime						100
 #define PeriodicNrfDataReceiveTime 				50
+#define	PeriodiRtcTime							900
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

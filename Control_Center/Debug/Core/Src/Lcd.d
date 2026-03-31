@@ -27,7 +27,8 @@ Core/Src/Lcd.o: ../Core/Src/Lcd.cpp ../Core/Inc/Lcd.h ../Core/Inc/i2c.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
+ ../Core/Inc/SensorsData.h
 ../Core/Inc/Lcd.h:
 ../Core/Inc/i2c.h:
 ../Core/Inc/main.h:
@@ -60,3 +61,4 @@ Core/Src/Lcd.o: ../Core/Src/Lcd.cpp ../Core/Inc/Lcd.h ../Core/Inc/i2c.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
+../Core/Inc/SensorsData.h:

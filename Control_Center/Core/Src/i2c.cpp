@@ -22,6 +22,8 @@
 
 /* USER CODE BEGIN 0 */
 #include <Lcd.h>
+#include <Rtc.h>
+#include <SensorsData.h>
 /* USER CODE END 0 */
 
 I2C_HandleTypeDef hi2c1;
@@ -319,6 +321,45 @@ void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 			mLcd.HoldingTime=0;
 	}
 
+}
+
+
+void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	if(hi2c==&hi2c1)
+	{
+//		if(Rtc.Com.CaseNum==ReadDataT)
+//		{
+//
+//			Rtc.Com.CaseNum++;
+//
+//		}
+
+
+	}
+}
+
+void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	if(hi2c==&hi2c1)
+	{
+		if(SensorsData.Get.CaseNum==SensorsData.RtcReadDataT)
+		{
+			Rtc.GetFromBcd(Rtc.Com.Receive);
+
+			Rtc.Time.Second=Rtc.Com.Receive[0];
+			Rtc.Time.Minute=Rtc.Com.Receive[1];
+			Rtc.Time.Hour=Rtc.Com.Receive[2];
+			Rtc.Time.Day=Rtc.Com.Receive[3];
+			Rtc.Time.Date=Rtc.Com.Receive[4];
+			Rtc.Time.Month=Rtc.Com.Receive[5];
+			Rtc.Time.Year=Rtc.Com.Receive[6];
+
+			SensorsData.Get.CaseNum++;
+
+		}
+
+	}
 }
 
 /* USER CODE END 1 */

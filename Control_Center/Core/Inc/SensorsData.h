@@ -14,6 +14,7 @@ public:
 
 	 struct mGet{
 
+		 int CaseNum;
 		 bool ParseFlag;
 		 bool NrfReceive;
 		 float SecTemp;
@@ -33,6 +34,15 @@ public:
 		 const float P0 = 101325;			// Pa
 		 const float T0 = 288.15;			// Kelvin (K)
 		 const float L = 0.0065;			// K/m
+
+	 };
+
+	 enum Case{
+		RtcReadData=				0x00,
+		RtcReadDataT=				0x01,
+		RtcFnishOperation=			0x02,
+		LcdPrint=					0x03,
+		LcdFnishOperation=			0x04,
 
 	 };
 

@@ -1,5 +1,7 @@
-../Core/Src/i2c.cpp:35:6:void MX_I2C1_Init()	2
-../Core/Src/i2c.cpp:64:6:void MX_I2C2_Init()	2
-../Core/Src/i2c.cpp:93:6:void HAL_I2C_MspInit(I2C_HandleTypeDef*)	7
-../Core/Src/i2c.cpp:237:6:void HAL_I2C_MspDeInit(I2C_HandleTypeDef*)	3
-../Core/Src/i2c.cpp:295:6:void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef*)	10
+../Core/Src/i2c.cpp:37:6:void MX_I2C1_Init()	2
+../Core/Src/i2c.cpp:66:6:void MX_I2C2_Init()	2
+../Core/Src/i2c.cpp:95:6:void HAL_I2C_MspInit(I2C_HandleTypeDef*)	7
+../Core/Src/i2c.cpp:239:6:void HAL_I2C_MspDeInit(I2C_HandleTypeDef*)	3
+../Core/Src/i2c.cpp:297:6:void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef*)	10
+../Core/Src/i2c.cpp:327:6:void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef*)	1
+../Core/Src/i2c.cpp:342:6:void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef*)	3
